@@ -1,0 +1,15 @@
+version: "3.3"
+
+volumes:
+  underwork_pgdata:
+
+services:
+  db:
+    build: .
+    container_name: underwork_db
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "3254:5432"
+    volumes:
+      - underwork_pgdata:/var/lib/postgresql/data
