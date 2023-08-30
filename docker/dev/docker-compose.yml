@@ -1,0 +1,15 @@
+version: "3.3"
+
+volumes:
+  underwear_pgdata:
+
+services:
+  db:
+    build: .
+    container_name: underwear_db
+    environment:
+      POSTGRES_PASSWORD: uw
+    ports:
+      - "3254:5432"
+    volumes:
+      - underwear_pgdata:/var/lib/postgresql/data

@@ -2,10 +2,11 @@ import Config
 
 # Configure your database
 config :underwear, Underwear.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "uw",
+  password: "uw",
   hostname: "localhost",
-  database: "underwear_dev",
+  port:     3254,
+  database: "underwear-dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

@@ -9,5 +9,11 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
+    export PGUSER=uw
+    export PGHOST=localhost
+    export PGPORT=3254
+    export PGDATABASE=underwear-dev
+    export PGPASSWORD=uw
+    export TZ=UTC
   '';
 }
