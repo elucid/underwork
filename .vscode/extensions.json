@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "bbenoist.nix",
+    "arrterian.nix-env-selector",
+    "brettm12345.nixfmt-vscode",
+    "jakebecker.elixir-ls",
+    "phoenixframework.phoenix",
+    "editorconfig.editorconfig",
+    "ms-azuretools.vscode-docker",
+    "esbenp.prettier-vscode",
+    "pantajoe.vscode-elixir-credo"
+  ]
+}

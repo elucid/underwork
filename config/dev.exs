@@ -6,7 +6,7 @@ config :underwork, Underwork.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "underwork_dev",
-  port:     3254,
+  port: 3254,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

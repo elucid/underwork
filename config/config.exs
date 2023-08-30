@@ -59,6 +59,27 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+if Mix.env() == :dev do
+  config :git_hooks,
+    auto_install: true,
+    verbose: true,
+    hooks: [
+      pre_commit: [
+        tasks: [
+          {:cmd, "mix format --check-formatted"},
+          {:cmd, "mix credo"}
+        ]
+      ],
+      pre_push: [
+        verbose: false,
+        tasks: [
+          {:cmd, "mix test --color"},
+          {:cmd, "echo 'success!'"}
+        ]
+      ]
+    ]
+end
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
