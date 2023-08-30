@@ -1,12 +1,8 @@
-{ pkgs ? import <nixpkgs> {} }:
-
-pkgs.mkShell {
-  buildInputs = [
-    pkgs.erlang
-    pkgs.elixir
-    pkgs.postgresql
-    pkgs.inotify-tools
-  ];
+let sources = import ./nix/sources.nix;
+in with import sources.nixpkgs { };
+let inputs = [ erlang elixir postgresql nixfmt ];
+in mkShell {
+  buildInputs = if stdenv.isDarwin then inputs else inputs ++ [ inotify-tools ];
 
   shellHook = ''
     export PGUSER=uw

@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "bbenoist.nix",
+    "arrterian.nix-env-selector",
+    "brettm12345.nixfmt-vscode",
+    "jakebecker.elixir-ls"
+  ]
+}
