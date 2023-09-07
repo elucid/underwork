@@ -1,4 +1,7 @@
 defmodule Underwork.Session do
+  @moduledoc """
+  Represent a session of work
+  """
   use Statechart
 
   statechart default: :created, context: {map, %{total_cycles: 9, current_cycle: 0}} do
