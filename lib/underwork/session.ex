@@ -50,7 +50,9 @@ defmodule Underwork.Session do
     state(:completed)
   end
 
-  def create(cycle_count) do
+  def create(opts \\ []) do
+    cycle_count = Keyword.get(opts, :cycles, 1)
+
     new()
     |> set_total_cycles(cycle_count)
   end
