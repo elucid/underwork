@@ -49,6 +49,7 @@ defmodule Underwork.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
+      {:ex_state, "~> 0.3.0", hex: :ex_state_ecto},
       {:plug_cowboy, "~> 2.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
