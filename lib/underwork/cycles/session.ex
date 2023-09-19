@@ -1,5 +1,7 @@
 defmodule Underwork.Cycles.Session do
   use Ecto.Schema
+  use ExState.Ecto.Subject
+
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -11,6 +13,8 @@ defmodule Underwork.Cycles.Session do
     field :important, :string
     field :measurable, :string
     field :noteworthy, :string
+
+    has_workflow Underwork.Cycles.SessionWorkflow
 
     timestamps()
   end
