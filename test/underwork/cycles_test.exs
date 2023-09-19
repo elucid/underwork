@@ -32,6 +32,13 @@ defmodule Underwork.CyclesTest do
       assert session.noteworthy == "some noteworthy"
     end
 
+    test "creating workflow for session" do
+      valid_attrs = %{accomplish: "some accomplish", complete: "some complete", distractions: "some distractions", important: "some important", measurable: "some measurable", noteworthy: "some noteworthy"}
+      assert {:ok, %Session{} = session} = Cycles.create_session(valid_attrs)
+
+      assert {:ok, %{context: %{session: session}}} = ExState.create(session)
+    end
+
     test "create_session/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Cycles.create_session(@invalid_attrs)
     end
