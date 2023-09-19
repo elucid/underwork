@@ -10,6 +10,9 @@ import Config
 config :underwork,
   ecto_repos: [Underwork.Repo]
 
+config :underwork, Underwork.Repo,
+  migration_primary_key: [type: :uuid]
+
 # Configures the endpoint
 config :underwork, UnderworkWeb.Endpoint,
   url: [host: "localhost"],
