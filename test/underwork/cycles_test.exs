@@ -2,6 +2,43 @@ defmodule Underwork.CyclesTest do
   use Underwork.DataCase
 
   alias Underwork.Cycles
+  alias Underwork.Cycles.Sale
+  alias Underwork.Cycles.User
+
+  def create_sale do
+    seller = User.new(%{name: "seller"}) |> Repo.insert!()
+    buyer = User.new(%{name: "seller"}) |> Repo.insert!()
+
+    Sale.new(%{
+      product_id: "abc123",
+      seller_id: seller.id,
+      buyer_id: buyer.id
+    })
+    |> Repo.insert!()
+  end
+
+  def order_steps(steps) do
+    Enum.sort_by(steps, &"#{&1.state}.#{&1.order}")
+  end
+
+  describe "create/1" do
+    test "creates a workflow for a workflowable subject" do
+      sale = create_sale()
+
+      {:ok, %{context: %{sale: sale}}} = ExState.create(sale)
+
+      refute sale.workflow.complete?
+      assert sale.workflow.state == "pending"
+
+      assert [
+               %{state: "pending", name: "attach_document", complete?: false},
+               %{state: "pending", name: "send", complete?: false},
+               %{state: "receipt_acknowledged", name: "close", complete?: false},
+               %{state: "sent", name: "close", complete?: false},
+               %{state: "sent", name: "acknowledge_receipt", complete?: false}
+             ] = order_steps(sale.workflow.steps)
+    end
+  end
 
   describe "sessions" do
     alias Underwork.Cycles.Session
