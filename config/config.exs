@@ -13,6 +13,8 @@ config :underwork,
 config :underwork, Underwork.Repo,
   migration_primary_key: [type: :uuid]
 
+config :ex_state, repo: Underwork.Repo
+
 # Configures the endpoint
 config :underwork, UnderworkWeb.Endpoint,
   url: [host: "localhost"],
