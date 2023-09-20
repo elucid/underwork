@@ -18,44 +18,44 @@ defmodule Underwork.Cycles.SessionWorkflow do
     end
 
     state :planning do
-      on :START, :pre
-      on :ABORT, :abandoned
+      on :start, :pre
+      on :abort, :abandoned
     end
 
     state :pre do
-      on :CYCLE, :cycling
-      on :FINISH, :reviewing
+      on :cycle, :cycling
+      on :finish, :reviewing
     end
 
     state :cycling do
-      initial_state :cycling_planning
+      initial_state :planning
 
-      on :FINISH_EARLY, :reviewing
-      on :ABORT, :abandoned
+      on :finish_early, :reviewing
+      on :abort, :abandoned
 
-      state :cycling_planning do
-        on :START_CYCLE, :cycling_pre
+      state :planning do
+        on :start_cycle, :pre
       end
 
-      state :cycling_pre do
-        on :WORK, :cycling_working
-        on :DONE, :cycling_reviewing
+      state :pre do
+        on :work, :working
+        on :done, :reviewing
       end
 
-      state :cycling_working do
-        on :DONE, :cycling_reviewing
-        on :PLAN, :cycling_planning
+      state :working do
+        on :done, :reviewing
+        on :plan, :planning
       end
 
-      state :cycling_reviewing do
+      state :reviewing do
         on_exit :update_current_cycle
 
-        on :COMPLETE, :pre
+        on :complete, :pre
       end
     end
 
     state :reviewing do
-      on :COMPLETE, :completed
+      on :complete, :completed
     end
 
     state :abandoned
