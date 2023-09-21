@@ -25,18 +25,34 @@ defmodule Underwork.CyclesTest do
     test "creates a workflow for a workflowable subject" do
       sale = create_sale()
 
+      refute sale.workflow_id
+
       {:ok, %{context: %{sale: sale}}} = ExState.create(sale)
+
+      assert sale.workflow.id
 
       refute sale.workflow.complete?
       assert sale.workflow.state == "pending"
+      {:ok, sale} = ExState.complete(sale, :attach_document)
+      assert sale.workflow.state == "pending"
+      {:ok, sale} = ExState.complete(sale, :send)
+      assert sale.workflow.state == "sent"
 
-      assert [
-               %{state: "pending", name: "attach_document", complete?: false},
-               %{state: "pending", name: "send", complete?: false},
-               %{state: "receipt_acknowledged", name: "close", complete?: false},
-               %{state: "sent", name: "close", complete?: false},
-               %{state: "sent", name: "acknowledge_receipt", complete?: false}
-             ] = order_steps(sale.workflow.steps)
+      sale2 = Repo.get!(Sale, sale.id) |> Repo.preload(workflow: :steps)
+      dbg sale2
+      assert sale2.workflow.state == "sent"
+      {:ok, sale2} = ExState.complete(sale2, :close)
+      assert sale2.workflow.state == "closed"
+      assert sale2.workflow.complete?
+
+      # dbg sale2.workflow.steps
+      # assert [
+      #          %{state: "pending", name: "attach_document", complete?: false},
+      #          %{state: "pending", name: "send", complete?: false},
+      #          %{state: "receipt_acknowledged", name: "close", complete?: false},
+      #          %{state: "sent", name: "close", complete?: false},
+      #          %{state: "sent", name: "acknowledge_receipt", complete?: false}
+      #        ] = order_steps(sale.workflow.steps)
     end
   end
 

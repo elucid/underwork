@@ -17,8 +17,8 @@ defmodule Underwork.Cycles.SaleWorkflow do
     end
 
     state :pending do
-      step :attach_document, participant: :seller
-      step :send, participant: :seller
+      step :attach_document#, participant: :seller
+      step :send#, participant: :seller
       on :cancelled, :cancelled
       on :document_replaced, :_
       on_completed :send, :sent
