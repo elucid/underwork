@@ -11,6 +11,7 @@ defmodule Underwork.Cycles.Session do
     field :important, :string
     field :measurable, :string
     field :noteworthy, :string
+    field :target_cycles, :integer
 
     timestamps()
   end
