@@ -16,6 +16,8 @@ defmodule Underwork.Cycles.Session do
 
     has_workflow Underwork.Cycles.SessionWorkflow
 
+    has_many :cycles, Underwork.Cycles.Cycle
+
     timestamps()
   end
 
