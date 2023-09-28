@@ -22,4 +22,22 @@ defmodule Underwork.CyclesFixtures do
 
     session
   end
+
+  @doc """
+  Generate a cycle.
+  """
+  def cycle_fixture(attrs \\ %{}) do
+    {:ok, cycle} =
+      attrs
+      |> Enum.into(%{
+        accomplish: "some accomplish",
+        energy: 42,
+        hazards: "some hazards",
+        morale: 42,
+        started: "some started"
+      })
+      |> Underwork.Cycles.create_cycle()
+
+    cycle
+  end
 end

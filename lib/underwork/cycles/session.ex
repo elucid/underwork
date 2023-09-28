@@ -13,6 +13,8 @@ defmodule Underwork.Cycles.Session do
     field :noteworthy, :string
     field :target_cycles, :integer
 
+    has_many :cycles, Underwork.Cycles.Cycle
+
     timestamps()
   end
 
