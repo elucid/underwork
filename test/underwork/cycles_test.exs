@@ -75,17 +75,17 @@ defmodule Underwork.CyclesTest do
     @invalid_attrs %{accomplish: nil, energy: nil, hazards: nil, morale: nil, started: nil}
 
     test "list_cycles/0 returns all cycles" do
-      cycle = cycle_fixture()
+      cycle = cycle_fixture(session_id: session_fixture().id)
       assert Cycles.list_cycles() == [cycle]
     end
 
     test "get_cycle!/1 returns the cycle with given id" do
-      cycle = cycle_fixture()
+      cycle = cycle_fixture(session_id: session_fixture().id)
       assert Cycles.get_cycle!(cycle.id) == cycle
     end
 
     test "create_cycle/1 with valid data creates a cycle" do
-      valid_attrs = %{accomplish: "some accomplish", energy: 42, hazards: "some hazards", morale: 42, started: "some started"}
+      valid_attrs = %{accomplish: "some accomplish", energy: 42, hazards: "some hazards", morale: 42, started: "some started", session_id: session_fixture().id}
 
       assert {:ok, %Cycle{} = cycle} = Cycles.create_cycle(valid_attrs)
       assert cycle.accomplish == "some accomplish"
@@ -100,7 +100,7 @@ defmodule Underwork.CyclesTest do
     end
 
     test "update_cycle/2 with valid data updates the cycle" do
-      cycle = cycle_fixture()
+      cycle = cycle_fixture(session_id: session_fixture().id)
       update_attrs = %{accomplish: "some updated accomplish", energy: 43, hazards: "some updated hazards", morale: 43, started: "some updated started"}
 
       assert {:ok, %Cycle{} = cycle} = Cycles.update_cycle(cycle, update_attrs)
@@ -112,19 +112,19 @@ defmodule Underwork.CyclesTest do
     end
 
     test "update_cycle/2 with invalid data returns error changeset" do
-      cycle = cycle_fixture()
+      cycle = cycle_fixture(session_id: session_fixture().id)
       assert {:error, %Ecto.Changeset{}} = Cycles.update_cycle(cycle, @invalid_attrs)
       assert cycle == Cycles.get_cycle!(cycle.id)
     end
 
     test "delete_cycle/1 deletes the cycle" do
-      cycle = cycle_fixture()
+      cycle = cycle_fixture(session_id: session_fixture().id)
       assert {:ok, %Cycle{}} = Cycles.delete_cycle(cycle)
       assert_raise Ecto.NoResultsError, fn -> Cycles.get_cycle!(cycle.id) end
     end
 
     test "change_cycle/1 returns a cycle changeset" do
-      cycle = cycle_fixture()
+      cycle = cycle_fixture(session_id: session_fixture().id)
       assert %Ecto.Changeset{} = Cycles.change_cycle(cycle)
     end
   end
