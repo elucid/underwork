@@ -1,5 +1,7 @@
 defmodule Underwork.Cycles.Cycle do
   use Ecto.Schema
+  use ExState.Ecto.Subject
+
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -10,6 +12,8 @@ defmodule Underwork.Cycles.Cycle do
     field :hazards, :string
     field :morale, :integer
     field :started, :string
+
+    has_workflow Underwork.Cycles.CycleWorkflow
 
     belongs_to :session, Underwork.Cycles.Session
 

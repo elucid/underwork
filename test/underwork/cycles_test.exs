@@ -128,4 +128,20 @@ defmodule Underwork.CyclesTest do
       assert %Ecto.Changeset{} = Cycles.change_cycle(cycle)
     end
   end
+
+  describe "cycle workflow" do
+    alias Underwork.Cycles.Cycle
+
+    import Underwork.CyclesFixtures
+    test "basic persistence" do
+      cycle = cycle_fixture(session_id: session_fixture().id)
+
+      ExState.create(cycle)
+
+      {:ok, %{context: %{cycle: cycle}}} = ExState.create(cycle)
+
+      refute cycle.workflow.complete?
+      assert cycle.workflow.state == "planning"
+    end
+  end
 end
