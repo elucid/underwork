@@ -10,7 +10,7 @@ defmodule Underwork.Repo.Migrations.CreateCycles do
       add :morale, :integer
       add :session_id, references(:sessions, type: :binary_id, on_delete: :nothing)
 
-      timestamps()
+      timestamps(inserted_at: :created_at)
     end
   end
 end

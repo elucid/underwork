@@ -13,7 +13,7 @@ defmodule Underwork.Cycles.Cycle do
 
     belongs_to :session, Underwork.Cycles.Session
 
-    timestamps()
+    timestamps(inserted_at: :created_at)
   end
 
   @doc false

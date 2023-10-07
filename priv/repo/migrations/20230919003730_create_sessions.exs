@@ -10,7 +10,7 @@ defmodule Underwork.Repo.Migrations.CreateSessions do
       add :measurable, :string
       add :noteworthy, :string
 
-      timestamps()
+      timestamps(inserted_at: :created_at)
     end
   end
 end

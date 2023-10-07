@@ -15,7 +15,7 @@ defmodule Underwork.Cycles.Session do
 
     has_many :cycles, Underwork.Cycles.Cycle
 
-    timestamps()
+    timestamps(inserted_at: :created_at)
   end
 
   @doc false
