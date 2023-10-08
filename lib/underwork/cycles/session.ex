@@ -23,6 +23,7 @@ defmodule Underwork.Cycles.Session do
     session
     |> cast(attrs, [:target_cycles])
     |> validate_required([:target_cycles])
+    |> validate_number(:target_cycles, greater_than: 1, less_than: 19)
   end
 
   def changeset(session, attrs) do
