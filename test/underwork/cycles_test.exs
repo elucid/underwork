@@ -21,15 +21,10 @@ defmodule Underwork.CyclesTest do
     end
 
     test "create_session/1 with valid data creates a session" do
-      valid_attrs = %{accomplish: "some accomplish", complete: "some complete", distractions: "some distractions", important: "some important", measurable: "some measurable", noteworthy: "some noteworthy"}
+      valid_attrs = %{target_cycles: 3}
 
       assert {:ok, %Session{} = session} = Cycles.create_session(valid_attrs)
-      assert session.accomplish == "some accomplish"
-      assert session.complete == "some complete"
-      assert session.distractions == "some distractions"
-      assert session.important == "some important"
-      assert session.measurable == "some measurable"
-      assert session.noteworthy == "some noteworthy"
+      assert session.target_cycles == 3
     end
 
     test "create_session/1 with invalid data returns error changeset" do

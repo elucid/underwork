@@ -19,6 +19,12 @@ defmodule Underwork.Cycles.Session do
   end
 
   @doc false
+  def changeset(%{id: nil} = session, attrs) do
+    session
+    |> cast(attrs, [:target_cycles])
+    |> validate_required([:target_cycles])
+  end
+
   def changeset(session, attrs) do
     session
     |> cast(attrs, [:accomplish, :important, :complete, :distractions, :measurable, :noteworthy])

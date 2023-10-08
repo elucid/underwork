@@ -11,6 +11,7 @@ defmodule Underwork.CyclesFixtures do
     {:ok, session} =
       attrs
       |> Enum.into(%{
+        target_cycles: 2,
         accomplish: "some accomplish",
         complete: "some complete",
         distractions: "some distractions",
