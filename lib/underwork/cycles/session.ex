@@ -12,6 +12,7 @@ defmodule Underwork.Cycles.Session do
     field :measurable, :string
     field :noteworthy, :string
     field :target_cycles, :integer
+    field :start_at, :utc_datetime
 
     has_many :cycles, Underwork.Cycles.Cycle
 
@@ -21,8 +22,8 @@ defmodule Underwork.Cycles.Session do
   @doc false
   def changeset(%{id: nil} = session, attrs) do
     session
-    |> cast(attrs, [:target_cycles])
-    |> validate_required([:target_cycles])
+    |> cast(attrs, [:target_cycles, :start_at])
+    |> validate_required([:target_cycles, :start_at])
     |> validate_number(:target_cycles, greater_than: 1, less_than: 19)
   end
 

@@ -21,10 +21,12 @@ defmodule Underwork.CyclesTest do
     end
 
     test "create_session/1 with valid data creates a session" do
-      valid_attrs = %{target_cycles: 3}
+      start_at = DateTime.utc_now() |> DateTime.truncate(:second)
+      valid_attrs = %{target_cycles: 3, start_at: start_at}
 
       assert {:ok, %Session{} = session} = Cycles.create_session(valid_attrs)
       assert session.target_cycles == 3
+      assert session.start_at == start_at
     end
 
     test "create_session/1 with invalid data returns error changeset" do

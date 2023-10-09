@@ -12,6 +12,7 @@ defmodule Underwork.CyclesFixtures do
       attrs
       |> Enum.into(%{
         target_cycles: 2,
+        start_at: DateTime.utc_now() |> DateTime.truncate(:second),
         accomplish: "some accomplish",
         complete: "some complete",
         distractions: "some distractions",
