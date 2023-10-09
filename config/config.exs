@@ -11,7 +11,8 @@ config :underwork,
   ecto_repos: [Underwork.Repo]
 
 config :underwork, Underwork.Repo,
-  migration_primary_key: [type: :uuid]
+  migration_primary_key: [type: :uuid],
+  migration_timestamps: [type: :utc_datetime_usec]
 
 # Configures the endpoint
 config :underwork, UnderworkWeb.Endpoint,
