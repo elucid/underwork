@@ -13,6 +13,12 @@ defmodule Underwork.CyclesFixtures do
       |> Enum.into(%{
         target_cycles: 2,
         start_at: DateTime.utc_now() |> DateTime.truncate(:second),
+      })
+      |> Underwork.Cycles.create_session()
+
+    update_attrs =
+      attrs
+      |> Enum.into(%{
         accomplish: "some accomplish",
         complete: "some complete",
         distractions: "some distractions",
@@ -20,7 +26,10 @@ defmodule Underwork.CyclesFixtures do
         measurable: "some measurable",
         noteworthy: "some noteworthy"
       })
-      |> Underwork.Cycles.create_session()
+
+    {:ok, session} =
+      session
+      |> Underwork.Cycles.update_session(update_attrs)
 
     session
   end
