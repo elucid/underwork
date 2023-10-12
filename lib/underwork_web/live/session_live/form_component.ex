@@ -19,12 +19,8 @@ defmodule UnderworkWeb.SessionLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:accomplish]} type="text" label="Accomplish" />
-        <.input field={@form[:complete]} type="text" label="Complete" />
-        <.input field={@form[:distractions]} type="text" label="Distractions" />
-        <.input field={@form[:important]} type="text" label="Important" />
-        <.input field={@form[:measurable]} type="text" label="Measurable" />
-        <.input field={@form[:noteworthy]} type="text" label="Noteworthy" />
+        <.input field={@form[:target_cycles]} type="number" label="Cycles" />
+        <.input field={@form[:start_at]} type="datetime-local" label="Start at" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Session</.button>
         </:actions>
@@ -35,7 +31,7 @@ defmodule UnderworkWeb.SessionLive.FormComponent do
 
   @impl true
   def update(%{session: session} = assigns, socket) do
-    changeset = Cycles.change_session(session)
+    changeset = Cycles.change_session_cycles(session)
 
     {:ok,
      socket
@@ -80,7 +76,7 @@ defmodule UnderworkWeb.SessionLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Session created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> push_navigate(to: ~p"/sessions/#{session}/plan")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}

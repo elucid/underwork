@@ -1,0 +1,22 @@
+<div>
+  <.header>
+    Plan
+  </.header>
+
+  <.simple_form
+    for={@form}
+    id="planning-form"
+    phx-change="validate"
+    phx-submit="save"
+    >
+    <.input field={@form[:accomplish]} type="text" label="Accomplish" />
+    <.input field={@form[:complete]} type="text" label="Complete" />
+    <.input field={@form[:distractions]} type="text" label="Distractions" />
+    <.input field={@form[:important]} type="text" label="Important" />
+    <.input field={@form[:measurable]} type="text" label="Measurable" />
+    <.input field={@form[:noteworthy]} type="text" label="Noteworthy" />
+    <:actions>
+      <.button phx-disable-with="Saving...">Start</.button>
+    </:actions>
+  </.simple_form>
+</div>

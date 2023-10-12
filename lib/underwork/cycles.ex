@@ -51,7 +51,7 @@ defmodule Underwork.Cycles do
   """
   def create_session(attrs \\ %{}) do
     %Session{}
-    |> Session.changeset(attrs)
+    |> Session.cycles_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -67,9 +67,9 @@ defmodule Underwork.Cycles do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_session(%Session{} = session, attrs) do
+  def plan_session(%Session{} = session, attrs) do
     session
-    |> Session.changeset(attrs)
+    |> Session.planning_changeset(attrs)
     |> Repo.update()
   end
 
@@ -98,8 +98,12 @@ defmodule Underwork.Cycles do
       %Ecto.Changeset{data: %Session{}}
 
   """
-  def change_session(%Session{} = session, attrs \\ %{}) do
-    Session.changeset(session, attrs)
+  def change_session_plan(%Session{} = session, attrs \\ %{}) do
+    Session.planning_changeset(session, attrs)
+  end
+
+  def change_session_cycles(%Session{} = session, attrs \\ %{}) do
+    Session.cycles_changeset(session, attrs)
   end
 
   alias Underwork.Cycles.Cycle
