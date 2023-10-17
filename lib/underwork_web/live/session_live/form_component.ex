@@ -43,7 +43,7 @@ defmodule UnderworkWeb.SessionLive.FormComponent do
   def handle_event("validate", %{"session" => session_params}, socket) do
     changeset =
       socket.assigns.session
-      |> Cycles.change_session(session_params)
+      |> Cycles.change_session_cycles(session_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
@@ -54,7 +54,7 @@ defmodule UnderworkWeb.SessionLive.FormComponent do
   end
 
   defp save_session(socket, :edit, session_params) do
-    case Cycles.update_session(socket.assigns.session, session_params) do
+    case Cycles.configure_session(socket.assigns.session, session_params) do
       {:ok, session} ->
         notify_parent({:saved, session})
 
@@ -69,7 +69,7 @@ defmodule UnderworkWeb.SessionLive.FormComponent do
   end
 
   defp save_session(socket, :new, session_params) do
-    case Cycles.create_session(session_params) do
+    case Cycles.configure_session(socket.assigns.session, session_params) do
       {:ok, session} ->
         notify_parent({:saved, session})
 

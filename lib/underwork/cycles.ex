@@ -49,10 +49,17 @@ defmodule Underwork.Cycles do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_session(attrs \\ %{}) do
-    %Session{}
+  def configure_session(%Session{} = session, attrs) when session.id == nil do
+    session
     |> Session.cycles_changeset(attrs)
     |> Repo.insert()
+  end
+
+  # TODO: give a better name
+  def configure_session(%Session{} = session, attrs) do
+    session
+    |> Session.cycles_changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
