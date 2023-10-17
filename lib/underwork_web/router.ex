@@ -23,11 +23,23 @@ defmodule UnderworkWeb.Router do
     live "/sessions/new", SessionLive.Index, :new
     live "/sessions/:id/edit", SessionLive.Index, :edit
 
+    # TODO: this particular LiveView won't do anything--it will just
+    # navigate to plan/work/review depending on the state of the session
     live "/sessions/:id", SessionLive.Show, :show
     live "/sessions/:id/show/edit", SessionLive.Show, :edit
 
     live "/sessions/:id/plan", SessionLive.Plan, :plan
+    live "/sessions/:id/review", SessionLive.Review, :review
 
+    live "/sessions/:session_id/cycle/new", SessionLive.Cycle, :new
+
+    # TODO: this particular LiveView won't do anything--it will just
+    # navigate to plan/work/review depending on the state of the cycle
+    live "/sessions/:session_id/cycle/:id", SessionLive.Cycle, :show
+
+    # live "/sessions/:session_id/cycle/:id/plan", SessionLive.Cycle, :plan
+    # live "/sessions/:session_id/cycle/:id/work", SessionLive.Cycle, :work
+    # live "/sessions/:session_id/cycle/:id/review", SessionLive.Cycle, :review
   end
 
   # Other scopes may use custom stacks.

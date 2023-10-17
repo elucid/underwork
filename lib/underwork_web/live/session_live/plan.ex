@@ -33,6 +33,7 @@ defmodule UnderworkWeb.SessionLive.Plan do
         socket =
           socket
           |> put_flash(:info, "YAY")
+          |> push_navigate(to: next_cycle_path(session))
 
         {:noreply, socket}
 
@@ -42,6 +43,22 @@ defmodule UnderworkWeb.SessionLive.Plan do
           |> assign(:form, to_form(changeset))
 
         {:noreply, socket}
+    end
+  end
+
+  # TODO: stick this some place where multiple LiveViews and components can see
+  defp next_cycle_path(session) do
+    last_cycle = List.last(session.cycles)
+
+    cond do
+      session.cycles == [] ->
+        ~p"/sessions/#{session.id}/cycle/new"
+      last_cycle.state != "reviewed" ->
+        ~p"/sessions/#{session.id}/cycle/#{last_cycle}"
+      length(session.cycles) < session.target_cycles ->
+        ~p"/sessions/#{session.id}/cycle/new"
+      true ->
+        ~p"/sessions/#{session.id}/review"
     end
   end
 end
