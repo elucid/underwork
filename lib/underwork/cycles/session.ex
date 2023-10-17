@@ -30,6 +30,6 @@ defmodule Underwork.Cycles.Session do
   def planning_changeset(session, attrs) do
     session
     |> cast(attrs, [:accomplish, :important, :complete, :distractions, :measurable, :noteworthy])
-    |> validate_required([:accomplish, :important, :complete, :distractions, :measurable, :noteworthy])
+    |> validate_required([:accomplish])
   end
 end
