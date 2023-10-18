@@ -3,7 +3,10 @@ defmodule UnderworkWeb.Helpers do
     endpoint: UnderworkWeb.Endpoint,
     router: UnderworkWeb.Router
 
+  alias Underwork.Repo
+
   def next_cycle_path(session) do
+    session = Repo.preload(session, :cycles)
     last_cycle = List.last(session.cycles)
 
     cond do
