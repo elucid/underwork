@@ -8,30 +8,37 @@ defmodule Underwork.CyclesFixtures do
   Generate a session.
   """
   def session_fixture(attrs \\ %{}) do
-    {:ok, session} =
-      attrs
-      |> Enum.into(%{
-        target_cycles: 2,
-        start_at: DateTime.utc_now() |> DateTime.truncate(:second),
-      })
-      |> Underwork.Cycles.create_session()
+    configure_attrs =
+      Map.merge(
+        %{
+          target_cycles: 2,
+          start_at: DateTime.utc_now() |> DateTime.truncate(:second)
+        },
+        Map.take(Enum.into(attrs, %{}), [:target_cycles, :start_at])
+      )
 
-    update_attrs =
-      attrs
-      |> Enum.into(%{
-        accomplish: "some accomplish",
-        complete: "some complete",
-        distractions: "some distractions",
-        important: "some important",
-        measurable: "some measurable",
-        noteworthy: "some noteworthy"
-      })
+    plan_attrs =
+      Map.merge(
+        %{accomplish: "some accomplish"},
+        Map.take(
+          Enum.into(attrs, %{}),
+          [
+            :accomplish,
+            :complete,
+            :distractions,
+            :important,
+            :measureable,
+            :noteworthy
+          ]
+        )
+      )
 
-    {:ok, session} =
+    session = %Underwork.Cycles.Session{}
+
+    with {:ok, session} <- Underwork.Cycles.configure_session(session, configure_attrs),
+         {:ok, session} <- Underwork.Cycles.plan_session(session, plan_attrs) do
       session
-      |> Underwork.Cycles.update_session(update_attrs)
-
-    session
+    end
   end
 
   @doc """

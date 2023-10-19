@@ -208,4 +208,25 @@ defmodule Underwork.Cycles do
   def change_cycle(%Cycle{} = cycle, attrs \\ %{}) do
     Cycle.changeset(cycle, attrs)
   end
+
+  def next_cycle(%Session{} = session) do
+    # TODO: don't fetch the cycles if we already have them
+    session = Repo.preload(session, :cycles)
+    last_cycle = List.last(session.cycles)
+
+    cond do
+      last_cycle && last_cycle.state != "reviewed" ->
+        # the current cycle is still underway
+        last_cycle
+
+      length(session.cycles) < session.target_cycles ->
+        # we don't have enough cycles, create a new one
+        {:ok, cycle} = create_cycle(%{session_id: session.id})
+        cycle
+
+      true ->
+        # we're all done, so start reviewing
+        nil
+    end
+  end
 end
