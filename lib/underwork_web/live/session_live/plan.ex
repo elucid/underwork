@@ -30,7 +30,7 @@ defmodule UnderworkWeb.SessionLive.Plan do
     session = socket.assigns.session
 
     case Cycles.plan_session(session, params) do
-      {:ok, _session} ->
+      {:ok, session} ->
         socket =
           socket
           |> put_flash(:info, "YAY")
