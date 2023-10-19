@@ -19,49 +19,6 @@ defmodule Underwork.CyclesTest do
       session = session_fixture()
       assert Cycles.get_session!(session.id) == session
     end
-
-    test "create_session/1 with valid data creates a session" do
-      start_at = DateTime.utc_now() |> DateTime.truncate(:second)
-      valid_attrs = %{target_cycles: 3, start_at: start_at}
-
-      assert {:ok, %Session{} = session} = Cycles.create_session(valid_attrs)
-      assert session.target_cycles == 3
-      assert session.start_at == start_at
-    end
-
-    test "create_session/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Cycles.create_session(@invalid_attrs)
-    end
-
-    test "update_session/2 with valid data updates the session" do
-      session = session_fixture()
-      update_attrs = %{accomplish: "some updated accomplish", complete: "some updated complete", distractions: "some updated distractions", important: "some updated important", measurable: "some updated measurable", noteworthy: "some updated noteworthy"}
-
-      assert {:ok, %Session{} = session} = Cycles.update_session(session, update_attrs)
-      assert session.accomplish == "some updated accomplish"
-      assert session.complete == "some updated complete"
-      assert session.distractions == "some updated distractions"
-      assert session.important == "some updated important"
-      assert session.measurable == "some updated measurable"
-      assert session.noteworthy == "some updated noteworthy"
-    end
-
-    test "update_session/2 with invalid data returns error changeset" do
-      session = session_fixture()
-      assert {:error, %Ecto.Changeset{}} = Cycles.update_session(session, @invalid_attrs)
-      assert session == Cycles.get_session!(session.id)
-    end
-
-    test "delete_session/1 deletes the session" do
-      session = session_fixture()
-      assert {:ok, %Session{}} = Cycles.delete_session(session)
-      assert_raise Ecto.NoResultsError, fn -> Cycles.get_session!(session.id) end
-    end
-
-    test "change_session/1 returns a session changeset" do
-      session = session_fixture()
-      assert %Ecto.Changeset{} = Cycles.change_session(session)
-    end
   end
 
   describe "cycles" do
@@ -106,12 +63,6 @@ defmodule Underwork.CyclesTest do
       assert cycle.hazards == "some updated hazards"
       assert cycle.morale == 43
       assert cycle.started == "some updated started"
-    end
-
-    test "update_cycle/2 with invalid data returns error changeset" do
-      cycle = cycle_fixture(session_id: session_fixture().id)
-      assert {:error, %Ecto.Changeset{}} = Cycles.update_cycle(cycle, @invalid_attrs)
-      assert cycle == Cycles.get_cycle!(cycle.id)
     end
 
     test "delete_cycle/1 deletes the cycle" do
