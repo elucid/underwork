@@ -11,8 +11,10 @@ defmodule UnderworkWeb.Helpers do
 
     cond do
       session.cycles == [] ->
+        # there aren't any cycles, so we need to make a new one
         ~p"/sessions/#{session.id}/cycle/new"
       last_cycle.state != "reviewed" ->
+        # the current cycle is still underway
         ~p"/sessions/#{session.id}/cycle/#{last_cycle.id}"
       length(session.cycles) < session.target_cycles ->
         ~p"/sessions/#{session.id}/cycle/new"
