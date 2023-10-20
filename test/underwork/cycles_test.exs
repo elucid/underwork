@@ -4,6 +4,7 @@ defmodule Underwork.CyclesTest do
   import Underwork.CyclesFixtures
 
   alias Underwork.Cycles
+  alias Underwork.Cycles.Session
   alias Underwork.Cycles.Cycle
 
   describe "sessions" do
@@ -90,6 +91,61 @@ defmodule Underwork.CyclesTest do
     test "change_cycle/1 returns a cycle changeset" do
       cycle = cycle_fixture(session_id: session_fixture().id)
       assert %Ecto.Changeset{} = Cycles.change_cycle(cycle)
+    end
+  end
+
+  describe "configure_session" do
+    test "ignores passed in state" do
+      session = %Session{}
+      attrs = %{target_cycles: 3, state: "working", start_at: DateTime.from_naive!(~N[2023-10-20 06:10:00], "Etc/UTC")}
+
+      {:ok, session} = Cycles.configure_session(session, attrs)
+
+      assert session.state == "planning"
+      assert session.target_cycles == 3
+    end
+
+    test "sets state to \"planning\" with a new session" do
+      session = %Session{}
+      attrs = %{target_cycles: 3, start_at: DateTime.from_naive!(~N[2023-10-20 06:10:00], "Etc/UTC")}
+
+      {:ok, session} = Cycles.configure_session(session, attrs)
+
+      assert session.state == "planning"
+      assert session.target_cycles == 3
+    end
+
+    test "updates target_cycles but not state for an existing session" do
+      session = %Session{}
+      attrs = %{target_cycles: 3, start_at: DateTime.from_naive!(~N[2023-10-20 06:10:00], "Etc/UTC")}
+
+      {:ok, session} = Cycles.configure_session(session, attrs)
+
+      {:ok, session} =
+        session
+        |> Ecto.Changeset.change(%{state: "working"})
+        |> Repo.update()
+
+      assert session.state == "working"
+
+      attrs = %{target_cycles: 4}
+      {:ok, session} = Cycles.configure_session(session, attrs)
+
+      assert session.target_cycles == 4
+      assert session.state == "working"
+    end
+  end
+
+  describe "#plan_session" do
+    test "transitions to working" do
+      session = %Session{}
+      attrs = %{target_cycles: 3, start_at: DateTime.from_naive!(~N[2023-10-20 06:10:00], "Etc/UTC")}
+
+      {:ok, session} = Cycles.configure_session(session, attrs)
+      assert session.state == "planning"
+
+      {:ok, session} = Cycles.plan_session(session, %{accomplish: "some accomplish"})
+      assert session.state == "working"
     end
   end
 

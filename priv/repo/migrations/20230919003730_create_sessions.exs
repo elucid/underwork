@@ -3,6 +3,7 @@ defmodule Underwork.Repo.Migrations.CreateSessions do
 
   def change do
     create table(:sessions) do
+      add :state, :string, null: false, default: "new"
       add :accomplish, :string
       add :important, :string
       add :complete, :string
