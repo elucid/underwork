@@ -7,6 +7,7 @@ defmodule Underwork.Cycles do
   alias Underwork.Repo
 
   alias Underwork.Cycles.Session
+  alias Underwork.Cycles.Cycle
 
   @doc """
   Returns the list of sessions.
@@ -80,6 +81,12 @@ defmodule Underwork.Cycles do
     |> Repo.update()
   end
 
+  def plan_cycle(%Cycle{} = cycle, attrs) do
+    cycle
+    |> Cycle.planning_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a session.
 
@@ -107,6 +114,10 @@ defmodule Underwork.Cycles do
   """
   def change_session_plan(%Session{} = session, attrs \\ %{}) do
     Session.planning_changeset(session, attrs)
+  end
+
+  def change_cycle_plan(%Cycle{} = cycle, attrs \\ %{}) do
+    Cycle.planning_changeset(cycle, attrs)
   end
 
   def change_session_cycles(%Session{} = session, attrs \\ %{}) do

@@ -26,7 +26,7 @@ defmodule Underwork.Cycles.Cycle do
   end
 
   @doc false
-  def plan_changeset(cycle, attrs) do
+  def planning_changeset(cycle, attrs) do
     cycle
     |> cast(attrs, [:state, :accomplish, :started, :hazards, :energy, :morale, :session_id])
     |> validate_required([:accomplish])
