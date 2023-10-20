@@ -1,4 +1,4 @@
-defmodule UnderworkWeb.SessionLive.Plan do
+defmodule UnderworkWeb.SessionLive.PlanSession do
   use UnderworkWeb, :live_view
   import UnderworkWeb.Helpers
 
