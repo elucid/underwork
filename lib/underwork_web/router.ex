@@ -37,9 +37,9 @@ defmodule UnderworkWeb.Router do
     # navigate to plan/work/review depending on the state of the cycle
     live "/sessions/:session_id/cycle/:id", SessionLive.Cycle, :show
 
-    # live "/sessions/:session_id/cycle/:id/plan", SessionLive.Cycle, :plan
-    # live "/sessions/:session_id/cycle/:id/work", SessionLive.Cycle, :work
-    # live "/sessions/:session_id/cycle/:id/review", SessionLive.Cycle, :review
+    live "/sessions/:session_id/cycle/:id/plan", SessionLive.Cycle, :plan
+    live "/sessions/:session_id/cycle/:id/work", SessionLive.Cycle, :work
+    live "/sessions/:session_id/cycle/:id/review", SessionLive.Cycle, :review
   end
 
   # Other scopes may use custom stacks.

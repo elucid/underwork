@@ -3,22 +3,15 @@ defmodule UnderworkWeb.Helpers do
     endpoint: UnderworkWeb.Endpoint,
     router: UnderworkWeb.Router
 
-  alias Underwork.Repo
-
-  def next_cycle_path(session) do
-    session = Repo.preload(session, :cycles)
-    last_cycle = List.last(session.cycles)
-
+  def next_cycle_path(session, cycle) do
     cond do
-      session.cycles == [] ->
-        # there aren't any cycles, so we need to make a new one
-        ~p"/sessions/#{session.id}/cycle/new"
-      last_cycle.state != "reviewed" ->
-        # the current cycle is still underway
-        ~p"/sessions/#{session.id}/cycle/#{last_cycle.id}"
-      length(session.cycles) < session.target_cycles ->
-        ~p"/sessions/#{session.id}/cycle/new"
-      true ->
+      cycle.state == "new" ->
+        ~p"/sessions/#{session.id}/cycle/#{cycle.id}/plan"
+      cycle.state == "planned" ->
+        ~p"/sessions/#{session.id}/cycle/#{cycle.id}/work"
+      cycle.state == "reviewing" ->
+        ~p"/sessions/#{session.id}/cycle/#{cycle.id}/review"
+      cycle == nil ->
         ~p"/sessions/#{session.id}/review"
     end
   end

@@ -34,7 +34,7 @@ defmodule UnderworkWeb.SessionLive.Plan do
         socket =
           socket
           |> put_flash(:info, "YAY")
-          |> push_navigate(to: next_cycle_path(session))
+          |> push_navigate(to: next_cycle_path(session, Cycles.next_cycle(session)))
 
         {:noreply, socket}
 
