@@ -5,7 +5,7 @@ defmodule Underwork.Cycles.Cycle do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "cycles" do
-    field :state, :string, default: "new"
+    field :state, :string, default: "planning"
     field :accomplish, :string
     field :energy, :integer
     field :hazards, :string
@@ -17,7 +17,7 @@ defmodule Underwork.Cycles.Cycle do
     timestamps(inserted_at: :created_at)
   end
 
-  @doc false
+  # TODO: get rid of this once we've built out more of the other changesets
   def changeset(cycle, attrs) do
     cycle
     |> cast(attrs, [:state, :accomplish, :started, :hazards, :energy, :morale, :session_id])
@@ -25,11 +25,28 @@ defmodule Underwork.Cycles.Cycle do
     |> foreign_key_constraint(:session_id)
   end
 
-  @doc false
+  def create_changeset(cycle, attrs) do
+    cycle
+    |> cast(attrs, [:state, :session_id])
+    |> validate_required([:state, :session_id])
+    |> foreign_key_constraint(:session_id)
+  end
+
   def planning_changeset(cycle, attrs) do
     cycle
     |> cast(attrs, [:state, :accomplish, :started, :hazards, :energy, :morale, :session_id])
-    |> validate_required([:accomplish])
+    |> advance_state("planning", "working")
+    |> validate_required([:accomplish, :session_id])
     |> foreign_key_constraint(:session_id)
+  end
+
+  def advance_state(%Ecto.Changeset{data: %{state: state}} = changeset, from_state, to_state) do
+    changeset = delete_change(changeset, :state)
+
+    case state do
+      ^from_state ->
+         changeset |> put_change(:state, to_state)
+      _ -> changeset
+    end
   end
 end

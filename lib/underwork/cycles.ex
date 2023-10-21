@@ -173,6 +173,12 @@ defmodule Underwork.Cycles do
     |> Repo.insert()
   end
 
+  def new_cycle(attrs \\ %{}) do
+    %Cycle{}
+    |> Cycle.create_changeset(attrs)
+    |> Repo.insert()
+  end
+
   @doc """
   Updates a cycle.
 
@@ -232,7 +238,7 @@ defmodule Underwork.Cycles do
 
       length(session.cycles) < session.target_cycles ->
         # we don't have enough cycles, create a new one
-        {:ok, cycle} = create_cycle(%{session_id: session.id})
+        {:ok, cycle} = new_cycle(%{session_id: session.id})
         cycle
 
       true ->

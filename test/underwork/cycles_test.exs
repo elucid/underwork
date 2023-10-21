@@ -155,7 +155,7 @@ defmodule Underwork.CyclesTest do
 
       cycle = Cycles.next_cycle(session)
       assert match?(%Cycle{}, cycle)
-      assert cycle.state == "new"
+      assert cycle.state == "planning"
     end
 
     test "when there are cycles, but not enough of them" do
@@ -166,6 +166,7 @@ defmodule Underwork.CyclesTest do
 
       assert match?(%Cycle{}, cycle)
       assert cycle.id != existing_cycle
+      assert cycle.state == "planning"
     end
 
     test "When the current cycle is underway, return the current cycle" do
@@ -195,6 +196,19 @@ defmodule Underwork.CyclesTest do
       cycle = Cycles.next_cycle(session)
 
       assert cycle == cycle2
+    end
+  end
+
+  describe "#plan_cycle" do
+    test "transitions to working" do
+      session = session_fixture(target_cycles: 2)
+
+      cycle = Cycles.next_cycle(session)
+      assert match?(%Cycle{}, cycle)
+      assert cycle.state == "planning"
+
+      {:ok, cycle} = Cycles.plan_cycle(cycle, %{accomplish: "some accomplish"})
+      assert cycle.state == "working"
     end
   end
 end

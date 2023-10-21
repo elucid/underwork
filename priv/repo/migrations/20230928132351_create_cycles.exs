@@ -3,7 +3,7 @@ defmodule Underwork.Repo.Migrations.CreateCycles do
 
   def change do
     create table(:cycles) do
-      add :state, :string, null: false, default: "new"
+      add :state, :string, null: false, default: "planning"
       add :accomplish, :text
       add :started, :text
       add :hazards, :text

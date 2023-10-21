@@ -5,9 +5,9 @@ defmodule UnderworkWeb.Helpers do
 
   def next_cycle_path(session, cycle) do
     cond do
-      cycle.state == "new" ->
+      cycle.state == "planning" ->
         ~p"/sessions/#{session.id}/cycle/#{cycle.id}/plan"
-      cycle.state == "planned" ->
+      cycle.state == "working" ->
         ~p"/sessions/#{session.id}/cycle/#{cycle.id}/work"
       cycle.state == "reviewing" ->
         ~p"/sessions/#{session.id}/cycle/#{cycle.id}/review"
