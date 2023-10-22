@@ -93,6 +93,12 @@ defmodule Underwork.Cycles do
     |> Repo.update()
   end
 
+  def review_cycle(%Cycle{} = cycle, attrs) do
+    cycle
+    |> Cycle.review_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a session.
 
