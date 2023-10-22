@@ -40,6 +40,14 @@ defmodule Underwork.Cycles.Cycle do
     |> foreign_key_constraint(:session_id)
   end
 
+  def work_changeset(cycle) do
+    attrs = %{}
+
+    cycle
+    |> cast(attrs, [:state])
+    |> advance_state("working", "reviewing")
+  end
+
   def advance_state(%Ecto.Changeset{data: %{state: state}} = changeset, from_state, to_state) do
     changeset = delete_change(changeset, :state)
 
