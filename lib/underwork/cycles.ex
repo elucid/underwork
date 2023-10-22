@@ -238,7 +238,7 @@ defmodule Underwork.Cycles do
     last_cycle = List.last(session.cycles)
 
     cond do
-      last_cycle && last_cycle.state != "reviewed" ->
+      last_cycle && last_cycle.state != "complete" ->
         # the current cycle is still underway
         last_cycle
 

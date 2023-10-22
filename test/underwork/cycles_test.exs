@@ -160,7 +160,7 @@ defmodule Underwork.CyclesTest do
 
     test "when there are cycles, but not enough of them" do
       session = session_fixture(target_cycles: 2)
-      existing_cycle = cycle_fixture(session_id: session.id, state: "reviewed")
+      existing_cycle = cycle_fixture(session_id: session.id, state: "complete")
 
       cycle = Cycles.next_cycle(session)
 
@@ -180,8 +180,8 @@ defmodule Underwork.CyclesTest do
 
     test "2 cycles, both reviewed" do
       session = session_fixture(target_cycles: 2)
-      cycle_fixture(session_id: session.id, state: "reviewed")
-      cycle_fixture(session_id: session.id, state: "reviewed")
+      cycle_fixture(session_id: session.id, state: "complete")
+      cycle_fixture(session_id: session.id, state: "complete")
 
       cycle = Cycles.next_cycle(session)
 
