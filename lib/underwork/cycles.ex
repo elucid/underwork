@@ -81,6 +81,12 @@ defmodule Underwork.Cycles do
     |> Repo.update()
   end
 
+  def review_session(%Session{} = session, attrs) do
+    session
+    |> Session.review_changeset(attrs)
+    |> Repo.update()
+  end
+
   def plan_cycle(%Cycle{} = cycle, attrs) do
     cycle
     |> Cycle.planning_changeset(attrs)
@@ -126,6 +132,10 @@ defmodule Underwork.Cycles do
   """
   def change_session_plan(%Session{} = session, attrs \\ %{}) do
     Session.planning_changeset(session, attrs)
+  end
+
+  def change_session_review(%Session{} = session, attrs \\ %{}) do
+    Session.review_changeset(session, attrs)
   end
 
   def change_cycle_plan(%Cycle{} = cycle, attrs \\ %{}) do

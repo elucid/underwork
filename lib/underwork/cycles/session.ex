@@ -6,14 +6,21 @@ defmodule Underwork.Cycles.Session do
   @foreign_key_type :binary_id
   schema "sessions" do
     field :state, :string, default: "new"
+    field :target_cycles, :integer, default: 2
+    field :start_at, :utc_datetime
+
     field :accomplish, :string
     field :complete, :string
     field :distractions, :string
     field :important, :string
     field :measurable, :string
     field :noteworthy, :string
-    field :target_cycles, :integer, default: 2
-    field :start_at, :utc_datetime
+
+    field :done, :string
+    field :compare, :string
+    field :bogged, :string
+    field :replicate, :string
+    field :takeaways, :string
 
     has_many :cycles, Underwork.Cycles.Cycle
 
@@ -34,6 +41,13 @@ defmodule Underwork.Cycles.Session do
     |> cast(attrs, [:accomplish, :important, :complete, :distractions, :measurable, :noteworthy])
     |> advance_state("planning", "working")
     |> validate_required([:accomplish])
+  end
+
+  def review_changeset(session, attrs) do
+    session
+    |> cast(attrs, [:done, :compare, :bogged, :replicate, :takeaways])
+    |> advance_state("working", "complete")
+    |> validate_required([:done])
   end
 
   def advance_state(%Ecto.Changeset{data: %{state: state}} = changeset, from_state, to_state) do

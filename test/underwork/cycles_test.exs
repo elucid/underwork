@@ -223,13 +223,25 @@ defmodule Underwork.CyclesTest do
   end
 
   describe "#review_cycle" do
-    test "transitions to completed" do
+    test "transitions to complete" do
       session = session_fixture(target_cycles: 2)
 
       cycle = cycle_fixture(session_id: session.id, state: "reviewing")
 
       {:ok, cycle} = Cycles.review_cycle(cycle, %{target: "Yes"})
       assert cycle.state == "complete"
+    end
+  end
+
+  describe "#review_session" do
+    test "transitions to complete" do
+      session = session_fixture(target_cycles: 2)
+
+      cycle_fixture(session_id: session.id, state: "complete")
+      cycle_fixture(session_id: session.id, state: "complete")
+
+      {:ok, session} = Cycles.review_session(session, %{done: "some done"})
+      assert session.state == "complete"
     end
   end
 end
