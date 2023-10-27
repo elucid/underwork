@@ -33,7 +33,7 @@ defmodule UnderworkWeb.SessionLive.ReviewSession do
         socket =
           socket
           |> put_flash(:info, "YAY")
-          |> push_navigate(to: ~p"/sessions")
+          |> push_navigate(to: ~p"/session")
 
         {:noreply, socket}
 
