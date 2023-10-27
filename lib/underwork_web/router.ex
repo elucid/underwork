@@ -19,6 +19,8 @@ defmodule UnderworkWeb.Router do
 
     get "/", PageController, :home
 
+    live "/session", SetupLive
+
     live "/sessions", SessionLive.Index, :index
     live "/sessions/new", SessionLive.Index, :new
     live "/sessions/:id/edit", SessionLive.Index, :edit
