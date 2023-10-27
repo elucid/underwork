@@ -20,6 +20,7 @@ defmodule UnderworkWeb.Router do
     get "/", PageController, :home
 
     live "/session", SetupLive
+    live "/cycles", CyclesLive
 
     live "/sessions/:id/plan", SessionLive.PlanSession, :plan
     live "/sessions/:id/review", SessionLive.ReviewSession, :review

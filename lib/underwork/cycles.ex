@@ -251,7 +251,8 @@ defmodule Underwork.Cycles do
   def current_session_for_user() do
     query = from s in Session, where: s.state != "complete", order_by: [desc: s.created_at]
 
-    Repo.one(query) || %Session{}
+    session = Repo.one(query) || %Session{}
+    Repo.preload(session, :cycles, order_by: :created_at)
   end
 
   def next_cycle(%Session{} = session) do

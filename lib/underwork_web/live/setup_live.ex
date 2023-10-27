@@ -54,7 +54,7 @@ defmodule UnderworkWeb.SetupLive do
         {:noreply,
          socket
          |> put_flash(:info, "Session updated successfully")
-         |> push_navigate(to: ~p"/sessions/#{session}/plan")}
+         |> push_navigate(to: ~p"/cycles")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
