@@ -1,11 +1,9 @@
-defmodule UnderworkWeb.SessionLive.ReviewCycle do
-  use UnderworkWeb, :live_view
-  import UnderworkWeb.Helpers
+defmodule UnderworkWeb.ReviewCycleComponent do
+  use UnderworkWeb, :live_component
 
   alias Underwork.Cycles
 
-  def mount(%{"id" => cycle_id}, _session, socket) do
-    cycle = Cycles.get_cycle!(cycle_id)
+  def update(%{cycle: cycle} = assigns, socket) do
     changeset = Cycles.change_cycle_plan(cycle)
     form = to_form(changeset)
 
@@ -26,17 +24,14 @@ defmodule UnderworkWeb.SessionLive.ReviewCycle do
     {:noreply, assign(socket, :form, to_form(changeset))}
   end
 
-  def handle_event("save", %{"cycle" => params}, socket) do
-    cycle = socket.assigns.cycle
-
+  def handle_event("save", %{"cycle" => params}, %{assigns: %{cycle: cycle}} = socket) do
     case Cycles.review_cycle(cycle, params) do
-      {:ok, cycle} ->
-        session = Cycles.get_session!(cycle.session_id)
-
+      {:ok, _cycle} ->
         socket =
           socket
           |> put_flash(:info, "YAY")
-          |> push_navigate(to: next_cycle_path(session, Cycles.next_cycle(session)))
+
+        send(self(), {__MODULE__, :next_cycle})
 
         {:noreply, socket}
 
