@@ -27,3 +27,11 @@
       />
     <% end %>
   <% end %>
+
+<%= if @session.state == "reviewing" do %>
+  <.live_component
+    module={UnderworkWeb.ReviewSessionComponent}
+    id={@session.id}
+    session={@session}
+  />
+<% end %>

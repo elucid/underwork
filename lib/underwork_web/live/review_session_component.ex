@@ -1,10 +1,9 @@
-defmodule UnderworkWeb.SessionLive.ReviewSession do
-  use UnderworkWeb, :live_view
+defmodule UnderworkWeb.ReviewSessionComponent do
+  use UnderworkWeb, :live_component
 
   alias Underwork.Cycles
 
-  def mount(%{"id" => session_id}, _session, socket) do
-    session = Cycles.get_session!(session_id)
+  def update(%{session: session} = assigns, socket) do
     changeset = Cycles.change_session_review(session)
     form = to_form(changeset)
 
