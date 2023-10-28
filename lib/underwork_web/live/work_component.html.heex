@@ -1,0 +1,15 @@
+<div>
+  <.header>
+    Working...
+  </.header>
+
+  <.simple_form
+    for={@form}
+    id="work-form"
+    >
+    <:actions>
+      <a>Return to Planning</a>
+      <.button phx-click="review" phx-target={@myself} phx-disable-with="Saving...">Start Review</.button>
+    </:actions>
+  </.simple_form>
+</div>

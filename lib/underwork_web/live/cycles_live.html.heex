@@ -10,6 +10,15 @@
       id={cycle.id}
       cycle={cycle}
     />
+
+    <%= if cycle.state == "working" do %>
+      <.live_component
+        module={UnderworkWeb.WorkComponent}
+        id={cycle.id}
+        cycle={cycle}
+      />
+    <% end %>
+
     <%= if cycle.state in ["reviewing", "complete"] do %>
       <.live_component
         module={UnderworkWeb.ReviewCycleComponent}
