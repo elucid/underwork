@@ -26,7 +26,7 @@ defmodule UnderworkWeb.PlanComponent do
     session = socket.assigns.session
 
     case Cycles.plan_session(session, params) do
-      {:ok, session} ->
+      {:ok, _session} ->
         socket =
           socket
           |> put_flash(:info, "YAY")

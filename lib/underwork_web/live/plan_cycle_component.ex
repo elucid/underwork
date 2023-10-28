@@ -1,11 +1,9 @@
-defmodule UnderworkWeb.SessionLive.PlanCycle do
-  use UnderworkWeb, :live_view
-  import UnderworkWeb.Helpers
+defmodule UnderworkWeb.PlanCycleComponent do
+  use UnderworkWeb, :live_component
 
   alias Underwork.Cycles
 
-  def mount(%{"id" => cycle_id}, _session, socket) do
-    cycle = Cycles.get_cycle!(cycle_id)
+  def update(%{cycle: cycle} = assigns, socket) do
     changeset = Cycles.change_cycle_plan(cycle)
     form = to_form(changeset)
 
@@ -30,13 +28,12 @@ defmodule UnderworkWeb.SessionLive.PlanCycle do
     cycle = socket.assigns.cycle
 
     case Cycles.plan_cycle(cycle, params) do
-      {:ok, cycle} ->
-        session = Cycles.get_session!(cycle.session_id)
-
+      {:ok, _cycle} ->
         socket =
           socket
           |> put_flash(:info, "YAY")
-          |> push_navigate(to: next_cycle_path(session, Cycles.next_cycle(session)))
+
+        send(self(), {__MODULE__, :next_cycle})
 
         {:noreply, socket}
 

@@ -3,3 +3,11 @@
     id={@session.id}
     session={@session}
   />
+
+  <%= for {_stream_id, cycle} <- @streams.cycles do %>
+    <.live_component
+      module={UnderworkWeb.PlanCycleComponent}
+      id={cycle.id}
+      cycle={cycle}
+    />
+  <% end %>
