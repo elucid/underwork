@@ -22,7 +22,8 @@ defmodule UnderworkWeb.CyclesLive do
       if next_cycle do
         stream_insert(socket, :cycles, next_cycle)
       else
-        socket
+        session = Cycles.current_session_for_user()
+        assign(socket, :session, session)
       end
 
     {:noreply, socket}

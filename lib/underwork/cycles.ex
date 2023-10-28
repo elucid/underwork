@@ -99,6 +99,12 @@ defmodule Underwork.Cycles do
     |> Repo.update()
   end
 
+  def finish_work(%Session{} = session) do
+    session
+    |> Session.work_changeset()
+    |> Repo.update()
+  end
+
   def review_cycle(%Cycle{} = cycle, attrs) do
     cycle
     |> Cycle.review_changeset(attrs)
@@ -256,8 +262,11 @@ defmodule Underwork.Cycles do
   end
 
   def next_cycle(%Session{} = session) do
-    # TODO: don't fetch the cycles if we already have them
-    session = Repo.preload(session, :cycles, force: true)
+    session =
+       session
+       |> Repo.reload()
+       |> Repo.preload(:cycles, order_by: :created_at, force: true)
+
     last_cycle = List.last(session.cycles)
 
     cond do
@@ -272,6 +281,8 @@ defmodule Underwork.Cycles do
 
       true ->
         # we're all done, so start reviewing
+        finish_work(session)
+
         nil
     end
   end

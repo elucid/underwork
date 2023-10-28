@@ -46,8 +46,16 @@ defmodule Underwork.Cycles.Session do
   def review_changeset(session, attrs) do
     session
     |> cast(attrs, [:done, :compare, :bogged, :replicate, :takeaways])
-    |> advance_state("working", "complete")
+    |> advance_state("reviewing", "complete")
     |> validate_required([:done])
+  end
+
+  def work_changeset(session) do
+    attrs = %{}
+
+    session
+    |> cast(attrs, [:state])
+    |> advance_state("working", "reviewing")
   end
 
   def advance_state(%Ecto.Changeset{data: %{state: state}} = changeset, from_state, to_state) do
