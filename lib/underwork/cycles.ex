@@ -257,7 +257,7 @@ defmodule Underwork.Cycles do
 
   def next_cycle(%Session{} = session) do
     # TODO: don't fetch the cycles if we already have them
-    session = Repo.preload(session, :cycles)
+    session = Repo.preload(session, :cycles, force: true)
     last_cycle = List.last(session.cycles)
 
     cond do
