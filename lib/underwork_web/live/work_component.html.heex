@@ -8,7 +8,7 @@
     id="work-form"
     >
     <:actions>
-      <a>Return to Planning</a>
+      <a phx-click={@return}>Return to Planning</a>
       <.button phx-click="review" phx-target={@myself} phx-disable-with="Saving...">Start Review</.button>
     </:actions>
   </.simple_form>

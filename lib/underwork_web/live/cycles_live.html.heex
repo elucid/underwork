@@ -11,13 +11,14 @@
       cycle={cycle}
     />
 
-    <%= if cycle.state == "working" do %>
+    <.modal :if={cycle.state == "working"} id="working-modal" show>
       <.live_component
         module={UnderworkWeb.WorkComponent}
         id={cycle.id}
         cycle={cycle}
+        return={hide_modal("working-modal")}
       />
-    <% end %>
+    </.modal>
 
     <%= if cycle.state in ["reviewing", "complete"] do %>
       <.live_component

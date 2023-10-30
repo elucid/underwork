@@ -3,7 +3,7 @@ defmodule UnderworkWeb.WorkComponent do
 
   alias Underwork.Cycles
 
-  def update(%{cycle: cycle}, socket) do
+  def update(%{cycle: cycle, return: return}, socket) do
     changeset = Cycles.change_cycle_plan(cycle)
     form = to_form(changeset)
 
@@ -11,6 +11,7 @@ defmodule UnderworkWeb.WorkComponent do
       socket
       |> assign(:cycle, cycle)
       |> assign(:form, form)
+      |> assign(:return, return)
 
     {:ok, socket}
   end
