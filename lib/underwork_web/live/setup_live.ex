@@ -10,6 +10,7 @@ defmodule UnderworkWeb.SetupLive do
     socket =
     socket
     |> assign(:session, session)
+    |> assign(:target_cycles, session.target_cycles)
     |> assign_form(changeset)
 
     {:ok, socket}
@@ -28,8 +29,14 @@ defmodule UnderworkWeb.SetupLive do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:target_cycles]} type="number" label="Cycles" />
         <.input field={@form[:start_at]} type="datetime-local" label="Start at" />
+        <div>
+          <label>Cycles</label>
+          <.button type="button" phx-click="decrement_cycles" phx-disable={@target_cycles == 2}>-</.button>
+          <span><%= @target_cycles %></span>
+          <.button type="button" phx-click="increment_cycles" phx-disable={@target_cycles == 18}>+</.button>
+          <.input field={@form[:target_cycles]} value={@target_cycles} type="hidden" />
+        </div>
         <:actions>
           <.button phx-disable-with="Saving...">Save Session</.button>
         </:actions>
@@ -45,6 +52,22 @@ defmodule UnderworkWeb.SetupLive do
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
+  end
+
+  def handle_event("increment_cycles", _, socket) do
+    socket =
+    socket
+    |> update(:target_cycles, fn cycles -> min(cycles + 1, 18) end)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("decrement_cycles", _, socket) do
+    socket =
+    socket
+    |> update(:target_cycles, fn cycles -> max(cycles - 1, 2) end)
+
+    {:noreply, socket}
   end
 
   def handle_event("save", %{"session" => session_params}, socket) do
