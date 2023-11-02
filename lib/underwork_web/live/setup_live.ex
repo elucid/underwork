@@ -11,6 +11,7 @@ defmodule UnderworkWeb.SetupLive do
     socket
     |> assign(:session, session)
     |> assign(:target_cycles, session.target_cycles)
+    |> assign(:start_at, "")
     |> assign_form(changeset)
 
     {:ok, socket}
@@ -18,7 +19,7 @@ defmodule UnderworkWeb.SetupLive do
 
   def render(assigns) do
     ~H"""
-    <div>
+    <div id="setup" phx-hook="TimezoneOffset">
       <.header>
         <:subtitle>Use this form to manage session records in your database.</:subtitle>
       </.header>
@@ -29,7 +30,6 @@ defmodule UnderworkWeb.SetupLive do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:start_at]} type="datetime-local" label="Start at" />
         <div>
           <label>Cycles</label>
           <.button type="button" phx-click="decrement_cycles" phx-disable={@target_cycles == 2}>-</.button>
@@ -37,12 +37,32 @@ defmodule UnderworkWeb.SetupLive do
           <.button type="button" phx-click="increment_cycles" phx-disable={@target_cycles == 18}>+</.button>
           <.input field={@form[:target_cycles]} value={@target_cycles} type="hidden" />
         </div>
+        <div>
+          <label>Start at</label>
+          <.button>-</.button>
+          <span><%= @start_at %></span>
+          <.button>+</.button>
+          <.input field={@form[:start_at]} type="hidden" />
+        </div>
         <:actions>
           <.button phx-disable-with="Saving...">Save Session</.button>
         </:actions>
       </.simple_form>
     </div>
     """
+  end
+
+  def handle_event("timezone_offset", offset, socket) do
+    start_at = nearest_10_minutes(DateTime.utc_now())
+    changeset = Cycles.change_session_cycles(socket.assigns.session, %{start_at: start_at})
+
+    socket =
+      socket
+      |> assign(:timezone_offset, offset)
+      |> assign(:start_at, format_time(start_at, offset))
+      |> assign_form(changeset)
+
+    {:noreply, socket}
   end
 
   def handle_event("validate", %{"session" => session_params}, socket) do
@@ -86,5 +106,17 @@ defmodule UnderworkWeb.SetupLive do
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     assign(socket, :form, to_form(changeset))
+  end
+
+  defp format_time(utc_time, timezone_offset_minutes) do
+    DateTime.add(utc_time, -timezone_offset_minutes * 60, :second)
+    |> Timex.format!("%l:%M %p", :strftime)
+  end
+
+  defp nearest_10_minutes(date_time) do
+    seconds = DateTime.to_unix(date_time)
+    remainder = rem(seconds, 600)
+    rounded_seconds = if remainder < 300, do: seconds - remainder, else: seconds + (600 - remainder)
+    DateTime.from_unix!(rounded_seconds)
   end
 end
