@@ -74,12 +74,9 @@ defmodule UnderworkWeb.SetupLive do
   def handle_event("increment_cycles", _, socket) do
     target_cycles = Ecto.Changeset.get_field(socket.assigns.form.source, :target_cycles)
 
-    # TODO move this into the changeset
-    new_cycles = min(target_cycles + 1, 18)
-
     changeset =
       socket.assigns.session
-      |> Cycles.change_session_cycles(%{target_cycles: new_cycles})
+      |> Cycles.change_session_cycles(%{target_cycles: target_cycles + 1})
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
@@ -88,12 +85,9 @@ defmodule UnderworkWeb.SetupLive do
   def handle_event("decrement_cycles", _, socket) do
     target_cycles = Ecto.Changeset.get_field(socket.assigns.form.source, :target_cycles)
 
-    # TODO move this into the changeset
-    new_cycles = max(target_cycles - 1, 2)
-
     changeset =
       socket.assigns.session
-      |> Cycles.change_session_cycles(%{target_cycles: new_cycles})
+      |> Cycles.change_session_cycles(%{target_cycles: target_cycles - 1})
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
