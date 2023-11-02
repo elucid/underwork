@@ -2,6 +2,7 @@ defmodule UnderworkWeb.SetupLive do
   use UnderworkWeb, :live_view
 
   alias Underwork.Cycles
+  alias Underwork.Cycles.Session
 
   def mount(_params, _session, socket) do
     session = Cycles.current_session_for_user()
@@ -17,6 +18,8 @@ defmodule UnderworkWeb.SetupLive do
   end
 
   def render(assigns) do
+    target_cycles = Ecto.Changeset.get_field(assigns.form.source, :target_cycles)
+
     ~H"""
     <div id="setup" phx-hook="TimezoneOffset">
       <.header>
@@ -26,11 +29,11 @@ defmodule UnderworkWeb.SetupLive do
       <.simple_form for={@form} id="session-form" phx-change="validate" phx-submit="save">
         <div>
           <label>Cycles</label>
-          <.button type="button" phx-click="decrement_cycles" phx-disable={false}>
+          <.button type="button" phx-click="decrement_cycles" phx-disable={at_min(target_cycles)}>
             -
           </.button>
-          <span><%= Ecto.Changeset.get_field(@form.source, :target_cycles) %></span>
-          <.button type="button" phx-click="increment_cycles" phx-disable={false}>
+          <span><%= target_cycles %></span>
+          <.button type="button" phx-click="increment_cycles" phx-disable={at_max(target_cycles)}>
             +
           </.button>
         </div>
@@ -104,6 +107,14 @@ defmodule UnderworkWeb.SetupLive do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
     end
+  end
+
+  defp at_max(target_cycles) do
+    target_cycles == Session.max_cycles
+  end
+
+  defp at_min(target_cycles) do
+    target_cycles == Session.min_cycles
   end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
