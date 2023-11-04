@@ -6,101 +6,81 @@ defmodule UnderworkWeb.SetupLive do
 
   def mount(_params, _session, socket) do
     session = Cycles.current_session_for_user()
-    changeset = Cycles.change_session_cycles(session)
+    target_cycles = session.target_cycles
+    start_at = session.start_at || nearest_10_minutes(DateTime.utc_now())
+    offset = 0
 
     socket =
       socket
       |> assign(:session, session)
-      |> assign(:start_at, "")
-      |> assign_form(changeset)
+      |> assign(:target_cycles, target_cycles)
+      |> assign(:start_at, start_at)
+      |> assign(:offset, offset)
 
     {:ok, socket}
   end
 
   def render(assigns) do
-    target_cycles = Ecto.Changeset.get_field(assigns.form.source, :target_cycles)
-
     ~H"""
     <div id="setup" phx-hook="TimezoneOffset">
       <.header>
         <:subtitle>Use this form to manage session records in your database.</:subtitle>
       </.header>
 
-      <.simple_form for={@form} id="session-form" phx-submit="save">
+      <form id="session-form" phx-submit="save">
         <div>
           <label>Cycles</label>
-          <.button type="button" phx-click="decrement_cycles" phx-disable={at_min(target_cycles)}>
+          <.button type="button" phx-click="decrement_cycles" phx-disable={at_min(@target_cycles)}>
             -
           </.button>
-          <span><%= target_cycles %></span>
-          <.button type="button" phx-click="increment_cycles" phx-disable={at_max(target_cycles)}>
+          <span><%= @target_cycles %></span>
+          <.button type="button" phx-click="increment_cycles" phx-disable={at_max(@target_cycles)}>
             +
           </.button>
         </div>
         <div>
           <label>Start at</label>
-          <.button>-</.button>
-          <span><%= @start_at %></span>
-          <.button>+</.button>
-          <.input field={@form[:start_at]} type="hidden" />
+          <.button type="button">-</.button>
+          <span><%= format_time(@start_at, @offset) %></span>
+          <.button type="button">+</.button>
         </div>
-        <:actions>
           <.button phx-disable-with="Saving...">Save Session</.button>
-        </:actions>
-      </.simple_form>
+      </form>
     </div>
     """
   end
 
   def handle_event("timezone_offset", offset, socket) do
-    start_at = nearest_10_minutes(DateTime.utc_now())
-    changeset = Cycles.change_session_cycles(socket.assigns.session, %{start_at: start_at})
-
     socket =
       socket
       |> assign(:timezone_offset, offset)
-      |> assign(:start_at, format_time(start_at, offset))
-      |> assign_form(changeset)
 
     {:noreply, socket}
   end
 
   def handle_event("increment_cycles", _, socket) do
-    target_cycles = Ecto.Changeset.get_field(socket.assigns.form.source, :target_cycles)
+    new_cycles = min(socket.assigns.target_cycles + 1, 18)
 
-    new_cycles = min(target_cycles + 1, 18)
-
-    changeset =
-      socket.assigns.session
-      |> Cycles.change_session_cycles(%{target_cycles: new_cycles})
-      |> Map.put(:action, :validate)
-
-    {:noreply, assign_form(socket, changeset)}
+    {:noreply, assign(socket, :target_cycles, new_cycles)}
   end
 
   def handle_event("decrement_cycles", _, socket) do
-    target_cycles = Ecto.Changeset.get_field(socket.assigns.form.source, :target_cycles)
+    new_cycles = max(socket.assigns.target_cycles - 1, 2)
 
-    new_cycles = max(target_cycles - 1, 2)
-
-    changeset =
-      socket.assigns.session
-      |> Cycles.change_session_cycles(%{target_cycles: new_cycles})
-      |> Map.put(:action, :validate)
-
-    {:noreply, assign_form(socket, changeset)}
+    {:noreply, assign(socket, :target_cycles, new_cycles)}
   end
 
-  def handle_event("save", %{"session" => session_params}, socket) do
+  def handle_event("save", _, socket) do
+    session_params = %{target_cycles: socket.assigns.target_cycles, start_at: socket.assigns.start_at}
     case Cycles.configure_session(socket.assigns.session, session_params) do
-      {:ok, session} ->
+      {:ok, _session} ->
         {:noreply,
          socket
          |> put_flash(:info, "Session updated successfully")
          |> push_navigate(to: ~p"/cycles")}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign_form(socket, changeset)}
+      {:error, %Ecto.Changeset{} = _changeset} ->
+        {:noreply, put_flash(socket, :error, "An unexpected error happened")}
     end
   end
 
@@ -110,10 +90,6 @@ defmodule UnderworkWeb.SetupLive do
 
   defp at_min(target_cycles) do
     target_cycles == Session.min_cycles
-  end
-
-  defp assign_form(socket, %Ecto.Changeset{} = changeset) do
-    assign(socket, :form, to_form(changeset))
   end
 
   defp format_time(utc_time, timezone_offset_minutes) do
