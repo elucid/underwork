@@ -40,9 +40,9 @@ defmodule UnderworkWeb.SetupLive do
         </div>
         <div>
           <label>Start at</label>
-          <.button type="button">-</.button>
+          <.button type="button" phx-click="decrement_start">-</.button>
           <span><%= format_time(@start_at, @offset) %></span>
-          <.button type="button">+</.button>
+          <.button type="button" phx-click="increment_start">+</.button>
         </div>
           <.button phx-disable-with="Saving...">Save Session</.button>
       </form>
@@ -68,6 +68,18 @@ defmodule UnderworkWeb.SetupLive do
     new_cycles = max(socket.assigns.target_cycles - 1, 2)
 
     {:noreply, assign(socket, :target_cycles, new_cycles)}
+  end
+
+  def handle_event("increment_start", _, socket) do
+    new_start = DateTime.add(socket.assigns.start_at, 5 * 60, :second)
+
+    {:noreply, assign(socket, :start_at, new_start)}
+  end
+
+  def handle_event("decrement_start", _, socket) do
+    new_start = DateTime.add(socket.assigns.start_at, -5 * 60, :second)
+
+    {:noreply, assign(socket, :start_at, new_start)}
   end
 
   def handle_event("save", _, socket) do
