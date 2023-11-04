@@ -37,12 +37,14 @@ defmodule UnderworkWeb.SetupLive do
           <.button type="button" phx-click="increment_cycles" phx-disable={at_max(@target_cycles)}>
             +
           </.button>
+          <span><%= format_session_duration(@target_cycles) %></span>
         </div>
         <div>
           <label>Start at</label>
           <.button type="button" phx-click="decrement_start">-</.button>
           <span><%= format_time(@start_at, @offset) %></span>
           <.button type="button" phx-click="increment_start">+</.button>
+          <span><%= format_session_end(@start_at, @target_cycles, @offset) %></span>
         </div>
           <.button phx-disable-with="Saving...">Save Session</.button>
       </form>
@@ -117,5 +119,22 @@ defmodule UnderworkWeb.SetupLive do
       if remainder < 300, do: seconds - remainder, else: seconds + (600 - remainder)
 
     DateTime.from_unix!(rounded_seconds)
+  end
+
+  defp format_session_duration(target_cycles) do
+     total_minutes = target_cycles * 40
+     hours = div(total_minutes, 60)
+     minutes = rem(total_minutes, 60)
+
+     cond do
+       hours == 0 -> "#{minutes} mins"
+       minutes == 0 -> "#{hours} hours"
+       true -> "#{hours} hours, #{minutes} mins"
+     end
+  end
+
+  defp format_session_end(start_at, target_cycles, offset) do
+    session_end = DateTime.add(start_at, target_cycles * 40 * 60, :second)
+    "Finish at #{format_time(session_end, offset)}"
   end
 end
