@@ -242,6 +242,8 @@ defmodule Underwork.CyclesTest do
       cycle_fixture(session_id: session.id, state: "complete", number: 1)
       cycle_fixture(session_id: session.id, state: "complete", number: 2)
 
+      {:ok, session} = Cycles.finish_work(session)
+      assert session.state == "reviewing"
       {:ok, session} = Cycles.review_session(session, %{done: "some done"})
       assert session.state == "complete"
     end
