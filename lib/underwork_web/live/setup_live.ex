@@ -26,7 +26,7 @@ defmodule UnderworkWeb.SetupLive do
         <:subtitle>Use this form to manage session records in your database.</:subtitle>
       </.header>
 
-      <.simple_form for={@form} id="session-form" phx-change="validate" phx-submit="save">
+      <.simple_form for={@form} id="session-form" phx-submit="save">
         <div>
           <label>Cycles</label>
           <.button type="button" phx-click="decrement_cycles" phx-disable={at_min(target_cycles)}>
@@ -63,15 +63,6 @@ defmodule UnderworkWeb.SetupLive do
       |> assign_form(changeset)
 
     {:noreply, socket}
-  end
-
-  def handle_event("validate", %{"session" => session_params}, socket) do
-    changeset =
-      socket.assigns.session
-      |> Cycles.change_session_cycles(session_params)
-      |> Map.put(:action, :validate)
-
-    {:noreply, assign_form(socket, changeset)}
   end
 
   def handle_event("increment_cycles", _, socket) do
