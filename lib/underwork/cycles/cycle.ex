@@ -6,6 +6,7 @@ defmodule Underwork.Cycles.Cycle do
   @foreign_key_type :binary_id
   schema "cycles" do
     field :state, :string, default: "planning"
+    field :number, :integer
 
     field :accomplish, :string
     field :energy, :integer
@@ -26,15 +27,15 @@ defmodule Underwork.Cycles.Cycle do
   # TODO: get rid of this once we've built out more of the other changesets
   def changeset(cycle, attrs) do
     cycle
-    |> cast(attrs, [:state, :accomplish, :started, :hazards, :energy, :morale, :session_id])
-    |> validate_required([:session_id])
+    |> cast(attrs, [:state, :accomplish, :started, :hazards, :energy, :morale, :session_id, :number])
+    |> validate_required([:session_id, :number])
     |> foreign_key_constraint(:session_id)
   end
 
   def create_changeset(cycle, attrs) do
     cycle
-    |> cast(attrs, [:state, :session_id])
-    |> validate_required([:state, :session_id])
+    |> cast(attrs, [:state, :session_id, :number])
+    |> validate_required([:state, :session_id, :number])
     |> foreign_key_constraint(:session_id)
   end
 

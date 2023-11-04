@@ -268,6 +268,7 @@ defmodule Underwork.Cycles do
        |> Repo.preload(:cycles, order_by: :created_at, force: true)
 
     last_cycle = List.last(session.cycles)
+    last_number = last_cycle && last_cycle.number || 0
 
     cond do
       last_cycle && last_cycle.state != "complete" ->
@@ -276,7 +277,7 @@ defmodule Underwork.Cycles do
 
       length(session.cycles) < session.target_cycles ->
         # we don't have enough cycles, create a new one
-        {:ok, cycle} = new_cycle(%{session_id: session.id})
+        {:ok, cycle} = new_cycle(%{session_id: session.id, number: last_number + 1})
         cycle
 
       true ->

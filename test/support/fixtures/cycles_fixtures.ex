@@ -48,6 +48,7 @@ defmodule Underwork.CyclesFixtures do
     {:ok, cycle} =
       attrs
       |> Enum.into(%{
+        number: 1,
         accomplish: "some accomplish",
         energy: 42,
         hazards: "some hazards",

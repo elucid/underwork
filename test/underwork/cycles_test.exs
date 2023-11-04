@@ -43,6 +43,7 @@ defmodule Underwork.CyclesTest do
 
     test "create_cycle/1 with valid data creates a cycle" do
       valid_attrs = %{
+        number: 1,
         accomplish: "some accomplish",
         energy: 42,
         hazards: "some hazards",
@@ -160,18 +161,19 @@ defmodule Underwork.CyclesTest do
 
     test "when there are cycles, but not enough of them" do
       session = session_fixture(target_cycles: 2)
-      existing_cycle = cycle_fixture(session_id: session.id, state: "complete")
+      existing_cycle = cycle_fixture(session_id: session.id, state: "complete", number: 1)
 
       cycle = Cycles.next_cycle(session)
 
       assert match?(%Cycle{}, cycle)
       assert cycle.id != existing_cycle
       assert cycle.state == "planning"
+      assert cycle.number == 2
     end
 
     test "When the current cycle is underway, return the current cycle" do
       session = session_fixture(target_cycles: 2)
-      existing_cycle = cycle_fixture(session_id: session.id, state: "planned")
+      existing_cycle = cycle_fixture(session_id: session.id, state: "planned", number: 1)
 
       cycle = Cycles.next_cycle(session)
 
@@ -180,8 +182,8 @@ defmodule Underwork.CyclesTest do
 
     test "2 cycles, both reviewed" do
       session = session_fixture(target_cycles: 2)
-      cycle_fixture(session_id: session.id, state: "complete")
-      cycle_fixture(session_id: session.id, state: "complete")
+      cycle_fixture(session_id: session.id, state: "complete", number: 1)
+      cycle_fixture(session_id: session.id, state: "complete", number: 2)
 
       cycle = Cycles.next_cycle(session)
 
@@ -190,8 +192,8 @@ defmodule Underwork.CyclesTest do
 
     test "2 cycles, last one is not reviewed" do
       session = session_fixture(target_cycles: 2)
-      _cycle1 = cycle_fixture(session_id: session.id, state: "reviewed")
-      cycle2 = cycle_fixture(session_id: session.id, state: "planning")
+      _cycle1 = cycle_fixture(session_id: session.id, state: "reviewed", number: 1)
+      cycle2 = cycle_fixture(session_id: session.id, state: "planning", number: 2)
 
       cycle = Cycles.next_cycle(session)
 
@@ -235,10 +237,10 @@ defmodule Underwork.CyclesTest do
 
   describe "#review_session" do
     test "transitions to complete" do
-      session = session_fixture(target_cycles: 2)
+      session = session_fixture(target_cycles: 2, state: "reviewing")
 
-      cycle_fixture(session_id: session.id, state: "complete")
-      cycle_fixture(session_id: session.id, state: "complete")
+      cycle_fixture(session_id: session.id, state: "complete", number: 1)
+      cycle_fixture(session_id: session.id, state: "complete", number: 2)
 
       {:ok, session} = Cycles.review_session(session, %{done: "some done"})
       assert session.state == "complete"
