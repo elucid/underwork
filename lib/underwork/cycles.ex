@@ -287,4 +287,17 @@ defmodule Underwork.Cycles do
         nil
     end
   end
+
+  def start_at(%Cycle{number: number} = cycle) do
+    cycle = Repo.preload(cycle, :session, force: true)
+    n = number - 1
+
+    DateTime.add(cycle.session.start_at, n * 40 * 60, :second)
+  end
+
+  def end_at(%Cycle{} = cycle) do
+    start_at = start_at(cycle)
+
+    DateTime.add(start_at, 30 * 60, :second)
+  end
 end

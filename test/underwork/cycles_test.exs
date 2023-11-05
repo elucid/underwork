@@ -248,4 +248,17 @@ defmodule Underwork.CyclesTest do
       assert session.state == "complete"
     end
   end
+
+  describe "cycle time math" do
+    test "cycle start relative to session start" do
+      start_at = ~U[2023-10-10 10:10:00Z]
+      session = session_fixture(target_cycles: 3, state: "working", start_at: start_at)
+
+      cycle_fixture(session_id: session.id, state: "complete", number: 1)
+      cycle_fixture(session_id: session.id, state: "complete", number: 2)
+      cycle_3 = cycle_fixture(session_id: session.id, state: "complete", number: 3)
+
+      assert Cycles.start_at(cycle_3) == ~U[2023-10-10 11:30:00Z]
+    end
+  end
 end
