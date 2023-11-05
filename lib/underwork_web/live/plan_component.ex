@@ -1,6 +1,5 @@
 defmodule UnderworkWeb.PlanComponent do
   use UnderworkWeb, :live_component
-  import UnderworkWeb.Helpers
 
   alias Underwork.Cycles
 

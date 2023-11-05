@@ -662,4 +662,14 @@ defmodule UnderworkWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  def local_time(%{time: time, id: _id} = assigns) do
+    assigns = assign(assigns, :time, DateTime.to_iso8601(time))
+
+    ~H"""
+      <span phx-hook="LocalTime" id={@id}>
+        <%= @time %>
+      </span>
+    """
+  end
 end

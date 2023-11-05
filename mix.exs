@@ -19,7 +19,7 @@ defmodule Underwork.MixProject do
   def application do
     [
       mod: {Underwork.Application, []},
-      extra_applications: [:logger, :timex, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -49,7 +49,6 @@ defmodule Underwork.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:timex, "~> 3.7"},
       {:plug_cowboy, "~> 2.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]

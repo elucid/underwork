@@ -8,21 +8,19 @@ defmodule UnderworkWeb.SetupLive do
     session = Cycles.current_session_for_user()
     target_cycles = session.target_cycles
     start_at = session.start_at || nearest_10_minutes(DateTime.utc_now())
-    offset = 0
 
     socket =
       socket
       |> assign(:session, session)
       |> assign(:target_cycles, target_cycles)
       |> assign(:start_at, start_at)
-      |> assign(:offset, offset)
 
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
-    <div id="setup" phx-hook="TimezoneOffset">
+    <div>
       <.header>
         <:subtitle>Use this form to manage session records in your database.</:subtitle>
       </.header>
@@ -42,22 +40,14 @@ defmodule UnderworkWeb.SetupLive do
         <div>
           <label>Start at</label>
           <.button type="button" phx-click="decrement_start">-</.button>
-          <span><%= format_time(@start_at, @offset) %></span>
+          <.local_time id="session-at" time={@start_at} />
           <.button type="button" phx-click="increment_start">+</.button>
-          <span><%= format_session_end(@start_at, @target_cycles, @offset) %></span>
+          <.local_time id="session-end" time={session_end(@start_at, @target_cycles)} />
         </div>
           <.button phx-disable-with="Saving...">Save Session</.button>
       </form>
     </div>
     """
-  end
-
-  def handle_event("timezone_offset", offset, socket) do
-    socket =
-      socket
-      |> assign(:timezone_offset, offset)
-
-    {:noreply, socket}
   end
 
   def handle_event("increment_cycles", _, socket) do
@@ -106,11 +96,6 @@ defmodule UnderworkWeb.SetupLive do
     target_cycles == Session.min_cycles
   end
 
-  defp format_time(utc_time, timezone_offset_minutes) do
-    DateTime.add(utc_time, -timezone_offset_minutes * 60, :second)
-    |> Timex.format!("%l:%M %p", :strftime)
-  end
-
   defp nearest_10_minutes(date_time) do
     seconds = DateTime.to_unix(date_time)
     remainder = rem(seconds, 600)
@@ -133,8 +118,7 @@ defmodule UnderworkWeb.SetupLive do
      end
   end
 
-  defp format_session_end(start_at, target_cycles, offset) do
-    session_end = DateTime.add(start_at, target_cycles * 40 * 60, :second)
-    "Finish at #{format_time(session_end, offset)}"
+  defp session_end(start_at, target_cycles) do
+    DateTime.add(start_at, target_cycles * 40 * 60, :second)
   end
 end
