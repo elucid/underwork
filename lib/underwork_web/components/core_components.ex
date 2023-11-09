@@ -672,4 +672,11 @@ defmodule UnderworkWeb.CoreComponents do
       </span>
     """
   end
+
+  def local_time_range(%{start_at: _start_at, end_at: _end_at, id: _id} = assigns) do
+    ~H"""
+    <.local_time id={"start-at-#{@id}"} time={@start_at} /> -
+    <.local_time id={"end-at-#{@id}"} time={@end_at} />
+    """
+  end
 end

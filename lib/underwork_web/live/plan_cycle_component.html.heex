@@ -1,7 +1,12 @@
 <div>
   <.header>
-    Plan Cycle
+    Plan Cycle <%= @cycle.number %>
   </.header>
+
+  <.local_time_range
+    start_at={Cycles.start_at(@cycle)}
+    end_at={Cycles.end_at(@cycle)}
+    id={"plan-#{@cycle.number}"} />
 
   <.simple_form
     for={@form}
