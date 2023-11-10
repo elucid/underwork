@@ -1,20 +1,20 @@
   <.live_component
     module={UnderworkWeb.PlanComponent}
-    id={@session.id}
+    id={"plan-session"}
     session={@session}
   />
 
   <%= for {_stream_id, cycle} <- @streams.cycles do %>
     <.live_component
       module={UnderworkWeb.PlanCycleComponent}
-      id={cycle.id}
+      id={"plan-cycle-#{cycle.id}"}
       cycle={cycle}
     />
 
     <.modal :if={cycle.state == "working"} id="working-modal" show>
       <.live_component
         module={UnderworkWeb.WorkComponent}
-        id={cycle.id}
+        id="working-cycle"
         cycle={cycle}
         return={hide_modal("working-modal")}
       />
@@ -23,7 +23,7 @@
     <%= if cycle.state in ["reviewing", "complete"] do %>
       <.live_component
         module={UnderworkWeb.ReviewCycleComponent}
-        id={cycle.id}
+        id={"review-cycle-#{cycle.id}"}
         cycle={cycle}
       />
     <% end %>
@@ -32,7 +32,7 @@
 <%= if @session.state == "reviewing" do %>
   <.live_component
     module={UnderworkWeb.ReviewSessionComponent}
-    id={@session.id}
+    id={"review-session"}
     session={@session}
   />
 <% end %>
