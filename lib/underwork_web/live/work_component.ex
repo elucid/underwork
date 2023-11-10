@@ -4,14 +4,31 @@ defmodule UnderworkWeb.WorkComponent do
   alias Underwork.Cycles
 
   def update(%{cycle: cycle, return: return}, socket) do
+    socket =
+      if socket.assigns[:work_timer] do
+        socket
+      else
+        work_timer = :timer.send_interval(1000, self(), {__MODULE__, :tick})
+        assign(socket, :work_timer, work_timer)
+      end
+
     changeset = Cycles.change_cycle_plan(cycle)
     form = to_form(changeset)
 
     socket =
       socket
+      |> assign(:current_time, DateTime.utc_now())
       |> assign(:cycle, cycle)
       |> assign(:form, form)
       |> assign(:return, return)
+
+    {:ok, socket}
+  end
+
+  def update(%{tick: :tick}, socket) do
+    socket =
+      socket
+      |> assign(:current_time, DateTime.utc_now())
 
     {:ok, socket}
   end
@@ -33,6 +50,25 @@ defmodule UnderworkWeb.WorkComponent do
           |> assign(:form, to_form(changeset))
 
         {:noreply, socket}
+    end
+  end
+
+  def remaining_time_message(cycle, current_time) do
+    start_at = Cycles.start_at(cycle)
+    end_at = Cycles.end_at(cycle)
+
+    cond do
+      DateTime.compare(current_time, start_at) == :lt ->
+        n = DateTime.diff(start_at, current_time, :minute)
+        "Prepare for your next cycle. Starting in #{n} minutes"
+      DateTime.compare(current_time, end_at) == :gt ->
+        "Done"
+      DateTime.compare(current_time, DateTime.add(end_at, -60, :second)) == :gt ->
+        n = DateTime.diff(end_at, current_time, :second)
+        "#{n} seconds remaining"
+      true ->
+        n = DateTime.diff(end_at, current_time, :minute)
+        "#{n} minutes remaining"
     end
   end
 end

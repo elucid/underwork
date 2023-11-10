@@ -15,6 +15,12 @@ defmodule UnderworkWeb.CyclesLive do
     {:ok, socket}
   end
 
+  def handle_info({component = UnderworkWeb.WorkComponent, :tick}, socket) do
+    send_update(component, id: "working-cycle", tick: :tick)
+
+    {:noreply, socket}
+  end
+
   def handle_info({_module, :next_cycle}, socket) do
     next_cycle = Cycles.next_cycle(socket.assigns.session)
 
