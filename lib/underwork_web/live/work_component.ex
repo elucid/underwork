@@ -18,6 +18,8 @@ defmodule UnderworkWeb.WorkComponent do
     socket =
       socket
       |> assign(:current_time, DateTime.utc_now())
+      |> assign(:start_at, Cycles.start_at(cycle))
+      |> assign(:end_at, Cycles.end_at(cycle))
       |> assign(:cycle, cycle)
       |> assign(:form, form)
       |> assign(:return, return)
@@ -53,10 +55,7 @@ defmodule UnderworkWeb.WorkComponent do
     end
   end
 
-  def remaining_time_message(cycle, current_time) do
-    start_at = Cycles.start_at(cycle)
-    end_at = Cycles.end_at(cycle)
-
+  def remaining_time_message(start_at, end_at, current_time) do
     cond do
       DateTime.compare(current_time, start_at) == :lt ->
         n = DateTime.diff(start_at, current_time, :minute)

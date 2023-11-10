@@ -3,7 +3,7 @@
     Working...
   </.header>
 
-  <h2><%= remaining_time_message(@cycle, @current_time) %></h2>
+  <h2><%= remaining_time_message(@start_at, @end_at, @current_time) %></h2>
 
   <.simple_form
     for={@form}
