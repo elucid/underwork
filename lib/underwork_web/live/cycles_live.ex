@@ -35,6 +35,10 @@ defmodule UnderworkWeb.CyclesLive do
     {:noreply, socket}
   end
 
+  def handle_params(_params, _url, socket) do
+    {:noreply, socket}
+  end
+
   def handle_info({_module, {:cycle_changed, cycle}}, socket) do
     {:noreply, stream_insert(socket, :cycles, cycle)}
   end

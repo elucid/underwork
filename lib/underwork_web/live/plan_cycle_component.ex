@@ -3,7 +3,7 @@ defmodule UnderworkWeb.PlanCycleComponent do
 
   alias Underwork.Cycles
 
-  def update(%{cycle: cycle} = assigns, socket) do
+  def update(%{cycle: cycle}, socket) do
     changeset = Cycles.change_cycle_plan(cycle)
     form = to_form(changeset)
 
@@ -28,10 +28,14 @@ defmodule UnderworkWeb.PlanCycleComponent do
     cycle = socket.assigns.cycle
 
     case Cycles.plan_cycle(cycle, params) do
-      {:ok, _cycle} ->
+      {:ok, cycle} ->
         socket =
-          socket
-          |> put_flash(:info, "YAY")
+          if cycle.state == "working" do
+            socket
+            |> push_navigate(to: ~p"/cycles/work")
+          else
+            socket
+          end
 
         send(self(), {__MODULE__, :next_cycle})
 

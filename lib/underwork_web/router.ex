@@ -21,6 +21,7 @@ defmodule UnderworkWeb.Router do
 
     live "/session", SetupLive
     live "/cycles", CyclesLive
+    live "/cycles/work", CyclesLive, :work
 
     live "/sessions/:id/plan", SessionLive.PlanSession, :plan
     live "/sessions/:id/review", SessionLive.ReviewSession, :review

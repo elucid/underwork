@@ -11,7 +11,7 @@
       cycle={cycle}
     />
 
-    <.modal :if={cycle.state == "working"} id="working-modal" show>
+    <.modal :if={cycle.state == "working" && @live_action == :work} id="working-modal" show on_cancel={JS.patch(~p"/cycles")}>
       <.live_component
         module={UnderworkWeb.WorkComponent}
         id="working-cycle"
