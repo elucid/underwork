@@ -4,13 +4,7 @@ defmodule UnderworkWeb.WorkComponent do
   alias Underwork.Cycles
 
   def update(%{cycle: cycle, return: return}, socket) do
-    socket =
-      if socket.assigns[:work_timer] do
-        socket
-      else
-        work_timer = :timer.send_interval(1000, self(), {__MODULE__, :tick})
-        assign(socket, :work_timer, work_timer)
-      end
+    send(self(), {__MODULE__, :start_timer})
 
     changeset = Cycles.change_cycle_plan(cycle)
     form = to_form(changeset)
