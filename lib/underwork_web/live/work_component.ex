@@ -58,15 +58,17 @@ defmodule UnderworkWeb.WorkComponent do
   def remaining_time_message(start_at, end_at, current_time) do
     cond do
       DateTime.compare(current_time, start_at) == :lt ->
-        n = DateTime.diff(start_at, current_time, :minute)
-        "Prepare for your next cycle. Starting in #{n} minutes"
+        n = DateTime.diff(start_at, current_time, :second)
+        n = div(n, 60) + if rem(n, 60) > 0, do: 1, else: 0
+        "Prepare for your next cycle. Starting in #{n} minutes."
       DateTime.compare(current_time, end_at) == :gt ->
-        "Done"
+        "Done! Go ahead and review your cycle."
       DateTime.compare(current_time, DateTime.add(end_at, -60, :second)) == :gt ->
         n = DateTime.diff(end_at, current_time, :second)
         "#{n} seconds remaining"
       true ->
-        n = DateTime.diff(end_at, current_time, :minute)
+        diff_in_seconds = DateTime.diff(end_at, current_time, :second)
+        n = div(diff_in_seconds, 60) + if rem(diff_in_seconds, 60) > 0, do: 1, else: 0
         "#{n} minutes remaining"
     end
   end
