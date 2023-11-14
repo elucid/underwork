@@ -13,4 +13,11 @@ Hooks.LocalTime = {
   }
 }
 
+Hooks.PlayAudio = {
+  mounted() {
+    let audio = new Audio(this.el.dataset.audioSrc);
+    audio.play();
+  }
+}
+
 export default Hooks;

@@ -679,4 +679,14 @@ defmodule UnderworkWeb.CoreComponents do
     <.local_time id={"end-at-#{@id}"} time={@end_at} />
     """
   end
+
+  def play_audio(%{sound_file: sound_file} = assigns) do
+    name = Path.basename(sound_file, ".mp3")
+    assigns = assign(assigns, :name, name)
+
+    ~H"""
+    <div phx-hook="PlayAudio" id={@name} data-audio-src={@sound_file}>
+    </div>
+    """
+  end
 end

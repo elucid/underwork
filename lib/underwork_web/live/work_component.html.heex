@@ -14,4 +14,7 @@
       <.button phx-click="review" phx-target={@myself} phx-disable-with="Saving...">Start Review</.button>
     </:actions>
   </.simple_form>
+
+  <.play_audio :if={@gong} sound_file={UnderworkWeb.Router.Helpers.static_path(@socket, "/audio/gong.mp3")} />
+  <.play_audio :if={@chime} sound_file={UnderworkWeb.Router.Helpers.static_path(@socket, "/audio/chime.mp3")} />
 </div>

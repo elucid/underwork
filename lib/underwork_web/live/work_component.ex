@@ -17,14 +17,28 @@ defmodule UnderworkWeb.WorkComponent do
       |> assign(:cycle, cycle)
       |> assign(:form, form)
       |> assign(:return, return)
+      |> assign(:gong, nil)
+      |> assign(:chime, nil)
 
     {:ok, socket}
   end
 
   def update(%{tick: :tick}, socket) do
+    current_time = DateTime.utc_now()
+
     socket =
       socket
-      |> assign(:current_time, DateTime.utc_now())
+      |> assign(:current_time, current_time)
+
+    socket =
+      case DateTime.diff(socket.assigns.end_at, current_time, :second) do
+        120 ->
+          assign(socket, :gong, true)
+        0 ->
+          assign(socket, :chime, true)
+        _ ->
+          socket
+        end
 
     {:ok, socket}
   end
