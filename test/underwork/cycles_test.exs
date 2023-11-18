@@ -173,7 +173,7 @@ defmodule Underwork.CyclesTest do
 
     test "When the current cycle is underway, return the current cycle" do
       session = session_fixture(target_cycles: 2)
-      existing_cycle = cycle_fixture(session_id: session.id, state: "planned", number: 1)
+      existing_cycle = cycle_fixture(session_id: session.id, state: "planned", number: 1) |> Repo.preload(:session)
 
       cycle = Cycles.next_cycle(session)
 
@@ -193,7 +193,7 @@ defmodule Underwork.CyclesTest do
     test "2 cycles, last one is not reviewed" do
       session = session_fixture(target_cycles: 2)
       _cycle1 = cycle_fixture(session_id: session.id, state: "reviewed", number: 1)
-      cycle2 = cycle_fixture(session_id: session.id, state: "planning", number: 2)
+      cycle2 = cycle_fixture(session_id: session.id, state: "planning", number: 2) |> Repo.preload(:session)
 
       cycle = Cycles.next_cycle(session)
 
@@ -256,7 +256,7 @@ defmodule Underwork.CyclesTest do
 
       cycle_fixture(session_id: session.id, state: "complete", number: 1)
       cycle_fixture(session_id: session.id, state: "complete", number: 2)
-      cycle_3 = cycle_fixture(session_id: session.id, state: "complete", number: 3)
+      cycle_3 = cycle_fixture(session_id: session.id, state: "complete", number: 3) |> Repo.preload(:session)
 
       assert Cycles.start_at(cycle_3) == ~U[2023-10-10 11:30:00Z]
     end

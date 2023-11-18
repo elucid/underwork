@@ -258,14 +258,14 @@ defmodule Underwork.Cycles do
     query = from s in Session, where: s.state != "complete", order_by: [desc: s.created_at]
 
     session = Repo.one(query) || %Session{}
-    Repo.preload(session, :cycles, order_by: :created_at)
+    Repo.preload(session, [cycles: :session], order_by: :created_at)
   end
 
   def next_cycle(%Session{} = session) do
     session =
        session
        |> Repo.reload()
-       |> Repo.preload(:cycles, order_by: :created_at, force: true)
+       |> Repo.preload([cycles: :session], order_by: :number, force: true)
 
     last_cycle = List.last(session.cycles)
     last_number = last_cycle && last_cycle.number || 0
@@ -278,7 +278,7 @@ defmodule Underwork.Cycles do
       length(session.cycles) < session.target_cycles ->
         # we don't have enough cycles, create a new one
         {:ok, cycle} = new_cycle(%{session_id: session.id, number: last_number + 1})
-        cycle
+        Repo.preload(cycle, :session)
 
       true ->
         # we're all done, so start reviewing
@@ -289,7 +289,6 @@ defmodule Underwork.Cycles do
   end
 
   def start_at(%Cycle{number: number} = cycle) do
-    cycle = Repo.preload(cycle, :session, force: true)
     n = number - 1
 
     DateTime.add(cycle.session.start_at, n * 40 * 60, :second)
