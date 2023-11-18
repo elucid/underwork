@@ -10,7 +10,6 @@ defmodule UnderworkWeb.CyclesLive do
     socket =
     socket
     |> assign(:session, session)
-    |> stream(:cycles, session.cycles)
 
     {:ok, socket}
   end
@@ -52,6 +51,10 @@ defmodule UnderworkWeb.CyclesLive do
   end
 
   def handle_params(_params, _url, socket) do
+    socket =
+    socket
+    |> stream(:cycles, socket.assigns.session.cycles)
+
     {:noreply, socket}
   end
 
