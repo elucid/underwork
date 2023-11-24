@@ -4,12 +4,12 @@ defmodule Underwork.Repo.Migrations.CreateSessions do
   def change do
     create table(:sessions) do
       add :state, :string, null: false, default: "new"
-      add :accomplish, :string
-      add :important, :string
-      add :complete, :string
-      add :distractions, :string
-      add :measurable, :string
-      add :noteworthy, :string
+      add :accomplish, :text
+      add :important, :text
+      add :complete, :text
+      add :distractions, :text
+      add :measurable, :text
+      add :noteworthy, :text
 
       timestamps(inserted_at: :created_at)
     end

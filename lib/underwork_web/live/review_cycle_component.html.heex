@@ -16,9 +16,9 @@
     phx-submit="save"
     >
     <.input field={@form[:target]} type="text" label="Completed Cycle's target?" />
-    <.input field={@form[:noteworthy]} type="text" label="Anything noteworthy?" />
-    <.input field={@form[:distractions]} type="text" label="Any distractions?" />
-    <.input field={@form[:improve]} type="text" label="Things to improve for next Cycle?" />
+    <.input field={@form[:noteworthy]} type="textarea" label="Anything noteworthy?" />
+    <.input field={@form[:distractions]} type="textarea" label="Any distractions?" />
+    <.input field={@form[:improve]} type="textarea" label="Things to improve for next Cycle?" />
     <:actions>
       <.button phx-disable-with="Saving...">Next</.button>
     </:actions>

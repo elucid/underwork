@@ -10,12 +10,12 @@
     phx-change="validate"
     phx-submit="save"
     >
-    <.input field={@form[:accomplish]} type="text" label="Accomplish" />
-    <.input field={@form[:complete]} type="text" label="Complete" />
-    <.input field={@form[:distractions]} type="text" label="Distractions" />
-    <.input field={@form[:important]} type="text" label="Important" />
-    <.input field={@form[:measurable]} type="text" label="Measurable" />
-    <.input field={@form[:noteworthy]} type="text" label="Noteworthy" />
+    <.input field={@form[:accomplish]} type="textarea" label="Accomplish" />
+    <.input field={@form[:complete]} type="textarea" label="Complete" />
+    <.input field={@form[:distractions]} type="textarea" label="Distractions" />
+    <.input field={@form[:important]} type="textarea" label="Important" />
+    <.input field={@form[:measurable]} type="textarea" label="Measurable" />
+    <.input field={@form[:noteworthy]} type="textarea" label="Noteworthy" />
     <:actions>
       <.button phx-disable-with="Saving...">Start</.button>
     </:actions>
