@@ -32,7 +32,7 @@ defmodule UnderworkWeb.PlanCycleComponent do
         socket =
           if cycle.state == "working" do
             socket
-            |> push_navigate(to: ~p"/cycles/work")
+            |> push_patch(to: ~p"/cycles/work")
           else
             socket
           end
