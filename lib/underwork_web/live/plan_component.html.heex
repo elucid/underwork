@@ -10,12 +10,12 @@
     phx-change="validate"
     phx-submit="save"
     >
-    <.input field={@form[:accomplish]} type="textarea" label="Accomplish" />
-    <.input field={@form[:complete]} type="textarea" label="Complete" />
-    <.input field={@form[:distractions]} type="textarea" label="Distractions" />
-    <.input field={@form[:important]} type="textarea" label="Important" />
-    <.input field={@form[:measurable]} type="textarea" label="Measurable" />
-    <.input field={@form[:noteworthy]} type="textarea" label="Noteworthy" />
+    <.input field={@form[:accomplish]} type="textarea" label="What am I trying to accomplish?" />
+    <.input field={@form[:important]} type="textarea" label="Why is this important and valuable?" />
+    <.input field={@form[:complete]} type="textarea" label="How will I know this is complete?" />
+    <.input field={@form[:distractions]} type="textarea" label="Potential distractions, procrastination? How am I going to deal with them?" />
+    <.input field={@form[:measurable]} type="textarea" label="Is this concrete / measurable or subjective / ambiguous?" />
+    <.input field={@form[:noteworthy]} type="textarea" label="Anything else noteworthy" />
     <:actions>
       <.button phx-disable-with="Saving...">Start</.button>
     </:actions>
