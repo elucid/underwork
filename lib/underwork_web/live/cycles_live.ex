@@ -19,7 +19,7 @@ defmodule UnderworkWeb.CyclesLive do
       if socket.assigns[:work_timer] do
         socket
       else
-        {:ok, {:interval, work_timer}} = :timer.send_interval(1000, self(), {component, :tick})
+        {:ok, work_timer} = :timer.send_interval(1000, self(), {component, :tick})
         assign(socket, :work_timer, work_timer)
       end
 
@@ -30,7 +30,7 @@ defmodule UnderworkWeb.CyclesLive do
     if socket.assigns.live_action == :work do
       send_update(component, id: "working-cycle", tick: :tick)
     else
-      Process.cancel_timer(socket.assigns.work_timer)
+      :timer.cancel(socket.assigns.work_timer)
     end
 
     {:noreply, socket}

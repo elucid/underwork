@@ -48,6 +48,7 @@ defmodule UnderworkWeb.WorkComponent do
       {:ok, cycle} ->
         socket =
           socket
+          |> push_patch(to: ~p"/cycles")
           |> put_flash(:info, "YAY")
 
         send(self(), {__MODULE__, {:cycle_changed, cycle}})
