@@ -19,6 +19,7 @@ defmodule Underwork.Cycles.Session do
     field :measurable, :string
     field :noteworthy, :string
 
+    field :target, :string
     field :done, :string
     field :compare, :string
     field :bogged, :string
@@ -51,9 +52,9 @@ defmodule Underwork.Cycles.Session do
 
   def review_changeset(session, attrs) do
     session
-    |> cast(attrs, [:done, :compare, :bogged, :replicate, :takeaways])
+    |> cast(attrs, [:target, :done, :compare, :bogged, :replicate, :takeaways])
     |> advance_state("reviewing", "complete")
-    |> validate_required([:done])
+    |> validate_required([:target, :done])
   end
 
   def work_changeset(session) do
