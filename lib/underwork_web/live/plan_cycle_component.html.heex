@@ -19,11 +19,20 @@
     <.input field={@form[:started]} type="textarea" label="How will I get started?" />
     <.input field={@form[:hazards]} type="textarea" label="Any hazards? How will I counter them?" />
 
-    <.energy_button label="High" value={3} form={@form} phx-target={@myself} />
-    <.energy_button label="Med" value={2} form={@form} phx-target={@myself} />
-    <.energy_button label="Low" value={1} form={@form} phx-target={@myself} />
+    <div>
+      Energy
+      <.energy_button label="High" value={3} form={@form} phx-target={@myself} />
+      <.energy_button label="Med" value={2} form={@form} phx-target={@myself} />
+      <.energy_button label="Low" value={1} form={@form} phx-target={@myself} />
+    </div>
 
-    <.input field={@form[:morale]} type="text" label="Morale" />
+    <div>
+      Morale
+      <.morale_button label="High" value={3} form={@form} phx-target={@myself} />
+      <.morale_button label="Med" value={2} form={@form} phx-target={@myself} />
+      <.morale_button label="Low" value={1} form={@form} phx-target={@myself} />
+    </div>
+
     <:actions>
       <.button phx-disable-with="Saving...">Start</.button>
     </:actions>
