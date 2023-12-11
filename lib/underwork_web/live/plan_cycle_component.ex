@@ -17,11 +17,20 @@ defmodule UnderworkWeb.PlanCycleComponent do
 
   def handle_event("validate", %{"cycle" => params}, socket) do
     changeset =
-      socket.assigns.cycle
+      socket.assigns.form.source
       |> Cycles.change_cycle_plan(params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :form, to_form(changeset))}
+  end
+
+  def handle_event("set_energy", %{"energy" => energy}, socket) do
+    changeset =
+      socket.assigns.cycle
+      |> Cycles.change_cycle_assessment(%{energy: energy})
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign(socket, form: to_form(changeset))}
   end
 
   def handle_event("save", %{"cycle" => params}, socket) do

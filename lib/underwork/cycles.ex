@@ -148,6 +148,10 @@ defmodule Underwork.Cycles do
     Cycle.planning_changeset(cycle, attrs)
   end
 
+  def change_cycle_assessment(cycle_or_changeset, attrs \\ %{}) do
+    Cycle.assessment_changeset(cycle_or_changeset, attrs)
+  end
+
   def change_session_cycles(%Session{} = session, attrs \\ %{}) do
     Session.cycles_changeset(session, attrs)
   end

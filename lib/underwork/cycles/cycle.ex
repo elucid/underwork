@@ -39,6 +39,13 @@ defmodule Underwork.Cycles.Cycle do
     |> foreign_key_constraint(:session_id)
   end
 
+  def assessment_changeset(cycle_or_changeset, attrs) do
+    cycle_or_changeset
+    |> cast(attrs, [:energy, :morale])
+    |> validate_number(:energy, greater_than_or_equal_to: 1, less_than_or_equal_to: 3)
+    |> validate_number(:morale, greater_than_or_equal_to: 1, less_than_or_equal_to: 3)
+  end
+
   def planning_changeset(cycle, attrs) do
     cycle
     |> cast(attrs, [:state, :accomplish, :started, :hazards, :energy, :morale, :session_id])
