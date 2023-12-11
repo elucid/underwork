@@ -58,4 +58,13 @@ defmodule UnderworkWeb.PlanCycleComponent do
         {:noreply, socket}
     end
   end
+
+  def energy_button(%{value: value, label: label, form: form, "phx-target": phx_target} = assigns) do
+    ~H"""
+    <.button type="button"
+      phx-click="set_energy" phx-value-energy={value} phx-target={phx_target}
+      class={if Phoenix.HTML.Form.input_value(form, :energy) == value, do: "bg-zinc-500", else: "bg-zinc-200"}
+      phx-prevent-default><%= label %></.button>
+    """
+  end
 end

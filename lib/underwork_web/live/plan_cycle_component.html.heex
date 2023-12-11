@@ -19,18 +19,9 @@
     <.input field={@form[:started]} type="textarea" label="How will I get started?" />
     <.input field={@form[:hazards]} type="textarea" label="Any hazards? How will I counter them?" />
 
-    <.button type="button"
-      phx-click="set_energy" phx-value-energy={3} phx-target={@myself}
-      class={if Phoenix.HTML.Form.input_value(@form, :energy) == 3, do: "bg-zinc-500", else: "bg-zinc-200"}
-      phx-prevent-default>High</.button>
-    <.button type="button"
-      phx-click="set_energy" phx-value-energy={2} phx-target={@myself}
-      class={if Phoenix.HTML.Form.input_value(@form, :energy) == 2, do: "bg-zinc-500", else: "bg-zinc-200"}
-      phx-prevent-default>Med</.button>
-    <.button type="button"
-      phx-click="set_energy" phx-value-energy={1} phx-target={@myself}
-      class={if Phoenix.HTML.Form.input_value(@form, :energy) == 1, do: "bg-zinc-500", else: "bg-zinc-200"}
-      phx-prevent-default>Low</.button>
+    <.energy_button label="High" value={3} form={@form} phx-target={@myself} />
+    <.energy_button label="Med" value={2} form={@form} phx-target={@myself} />
+    <.energy_button label="Low" value={1} form={@form} phx-target={@myself} />
 
     <.input field={@form[:morale]} type="text" label="Morale" />
     <:actions>
