@@ -140,6 +140,10 @@ defmodule Underwork.Cycles do
     Session.planning_changeset(session, attrs)
   end
 
+  def change_session_target(data, attrs \\ %{}) do
+    Session.target_changeset(data, attrs)
+  end
+
   def change_session_review(%Session{} = session, attrs \\ %{}) do
     Session.review_changeset(session, attrs)
   end

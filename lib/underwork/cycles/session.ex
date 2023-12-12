@@ -50,6 +50,12 @@ defmodule Underwork.Cycles.Session do
     |> validate_required([:accomplish])
   end
 
+  def target_changeset(data, attrs) do
+    data
+    |> cast(attrs, [:target])
+    |> validate_number(:target, greater_than_or_equal_to: 1, less_than_or_equal_to: 3)
+  end
+
   def review_changeset(session, attrs) do
     session
     |> cast(attrs, [:target, :done, :compare, :bogged, :replicate, :takeaways])
