@@ -144,6 +144,10 @@ defmodule Underwork.Cycles do
     Session.review_changeset(session, attrs)
   end
 
+  def change_cycle_review(cycle_or_changeset, attrs \\ %{}) do
+    Cycle.review_changeset(cycle_or_changeset, attrs)
+  end
+
   def change_cycle_plan(cycle_or_changeset, attrs \\ %{}) do
     Cycle.planning_changeset(cycle_or_changeset, attrs)
   end

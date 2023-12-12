@@ -18,14 +18,14 @@ defmodule UnderworkWeb.ReviewCycleComponent do
   def handle_event("validate", %{"cycle" => params}, socket) do
     changeset =
       socket.assigns.cycle
-      |> Cycles.change_cycle_plan(params)
+      |> Cycles.change_cycle_review(changes)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :form, to_form(changeset))}
   end
 
   def handle_event("save", %{"cycle" => params}, %{assigns: %{cycle: cycle}} = socket) do
-    case Cycles.review_cycle(cycle, params) do
+    case Cycles.review_cycle(cycle, changes) do
       {:ok, _cycle} ->
         socket =
           socket
