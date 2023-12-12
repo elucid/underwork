@@ -19,7 +19,7 @@ defmodule Underwork.Cycles.Session do
     field :measurable, :string
     field :noteworthy, :string
 
-    field :target, :string
+    field :target, :integer
     field :done, :string
     field :compare, :string
     field :bogged, :string
