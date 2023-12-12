@@ -15,7 +15,13 @@
     phx-change="validate"
     phx-submit="save"
     >
-    <.input field={@form[:target]} type="text" label="Completed Cycle's target?" />
+    <div>
+      Completed Cycle's target?
+      <.target_button label="Yes" value={3} form={@form} phx-target={@myself} />
+      <.target_button label="Half" value={2} form={@form} phx-target={@myself} />
+      <.target_button label="No" value={1} form={@form} phx-target={@myself} />
+    </div>
+
     <.input field={@form[:noteworthy]} type="textarea" label="Anything noteworthy?" />
     <.input field={@form[:distractions]} type="textarea" label="Any distractions?" />
     <.input field={@form[:improve]} type="textarea" label="Things to improve for next Cycle?" />

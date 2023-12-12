@@ -46,6 +46,12 @@ defmodule Underwork.Cycles.Cycle do
     |> validate_number(:morale, greater_than_or_equal_to: 1, less_than_or_equal_to: 3)
   end
 
+  def target_changeset(cycle_or_changeset, attrs) do
+    cycle_or_changeset
+    |> cast(attrs, [:target])
+    |> validate_number(:target, greater_than_or_equal_to: 1, less_than_or_equal_to: 3)
+  end
+
   def planning_changeset(cycle, attrs) do
     cycle
     |> cast(attrs, [:state, :accomplish, :started, :hazards, :energy, :morale, :session_id])
