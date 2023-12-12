@@ -14,7 +14,7 @@ defmodule Underwork.Cycles.Cycle do
     field :morale, :integer
     field :started, :string
 
-    field :target, :string
+    field :target, :integer
     field :noteworthy, :string
     field :distractions, :string
     field :improve, :string
